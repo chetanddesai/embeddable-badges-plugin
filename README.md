@@ -1,4 +1,4 @@
-embeddable-build-status-plugin
+embeddable-Badges-plugin
 ==============================
 
-See https://wiki.jenkins-ci.org/display/JENKINS/Embeddable+Build+Badges+Plugin
+See https://wiki.jenkins-ci.org/display/JENKINS/Embeddable+Badges+Plugin
