@@ -6,10 +6,10 @@
     <version>1.580.1</version>
   </parent>
 
-  <artifactId>embeddable-build-status</artifactId>
-  <version>1.10-SNAPSHOT</version>
+  <artifactId>embeddable-badges</artifactId>
+  <version>0.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
-  <url>https://wiki.jenkins-ci.org/display/JENKINS/Embeddable+Build+Status+Plugin</url>
+  <url>https://wiki.jenkins-ci.org/display/JENKINS/Embeddable+Badges+Plugin</url>
 
   <repositories>
     <repository>
