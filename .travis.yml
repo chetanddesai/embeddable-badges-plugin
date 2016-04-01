@@ -11,4 +11,4 @@ matrix:
       env: MAIN_ARGS="cobertura:cobertura coveralls:report"
 
 script:
-  - mvn clean $MAIN_ARGS
+  - mvn clean install
