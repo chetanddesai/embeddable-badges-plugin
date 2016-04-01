@@ -6,10 +6,10 @@
     <version>1.580.1</version>
   </parent>
   
-  <artifactId>embeddable-build-status</artifactId>
-  <version>1.10-SNAPSHOT</version>
+  <artifactId>embeddable-badges</artifactId>
+  <version>0.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
-  <url>https://wiki.jenkins-ci.org/display/JENKINS/Embeddable+Build+Status+Plugin</url>
+  <url>https://wiki.jenkins-ci.org/display/JENKINS/Embeddable+Badges+Plugin</url>
 
   <repositories>
     <repository>
@@ -54,12 +54,6 @@
     </plugins>
   </build>
 
-  <scm>
-    <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-    <url>http://github.com/jenkinsci/git-plugin</url>
-    <tag>HEAD</tag>
-  </scm>
     <!-- Workflow plugin imports are used to test compatibility -->
   <dependencies>
     <dependency>

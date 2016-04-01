@@ -44,7 +44,7 @@ class StatusImage implements HttpResponse {
         etag = '"' + Jenkins.RESOURCE_PATH + '/' + fileName + '"';
 
         URL image = new URL(
-            Jenkins.getInstance().pluginManager.getPlugin("embeddable-build-status").baseResourceURL,
+            Jenkins.getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
             "status/"+fileName);
         InputStream s = image.openStream();
         try {
