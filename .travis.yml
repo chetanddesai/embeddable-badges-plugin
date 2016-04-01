@@ -1,6 +1,6 @@
 ---
 language: java
-sudo: true
+sudo: false
 
 script:
   - mvn clean install
