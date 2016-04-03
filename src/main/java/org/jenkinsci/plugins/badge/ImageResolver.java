@@ -58,6 +58,13 @@ public class ImageResolver {
         // Pick a default style
         defaultStyle = flatImages;
         styles.put("default", defaultStyle);
+
+        // shields.io code-coverage-badges
+        StatusImage[] codeCoverageImages = new StatusImage[] {
+                new StatusImage("build-coverage-flat.svg")
+        };
+        styles.put("codeCoverage", codeCoverageImages);
+
     }
 
     public StatusImage getImage(BallColor color) {
@@ -72,6 +79,12 @@ public class ImageResolver {
         if (color.isAnimated())
             return images[3];
 
+        if (style != null){
+            if (style.equals("codeCoverage")){
+                return images[0];
+            }
+        }
+
         switch (color) {
         case RED:
             return images[0];
@@ -83,6 +96,7 @@ public class ImageResolver {
             return images[4];
         default:
             return images[5];
+            
         }
     }
 

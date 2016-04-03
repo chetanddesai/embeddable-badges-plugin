@@ -133,6 +133,7 @@ public class PublicBadgeActionTest {
         wc.goTo("buildStatus/icon?job=free", "image/svg+xml");
         j.buildAndAssertSuccess(project);
         wc.goTo("buildStatus/icon?job=free&build=1", "image/svg+xml");
+        wc.goTo("buildStatus/icon?job=free&build=1&style=codeCoverage", "image/svg+xml");
     }
 
     @PresetData(PresetData.DataSet.ANONYMOUS_READONLY)
