@@ -72,6 +72,17 @@ public class ImageResolver {
 
     }
 
+    public void getCodeCoverage(){
+        // TO DO:
+        // check if they are using Clover or Cobertura or Junit
+        // Get the results. 
+        // If the results is in a range set the replace hex color in modifiedColor
+        // paste results to the modifiedPercentage
+        // need to make the .replace continue to modify the same file. need to add a marker in the orig .svg
+    }
+
+
+
     public void modifySVG() throws FileNotFoundException, IOException {
         String filePath = new File("").getAbsolutePath();
         filePath = filePath + "/src/main/webapp/status/build-coverage-flat.svg";
