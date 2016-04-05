@@ -27,6 +27,11 @@ import hudson.model.BallColor;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.io.*;
+import java.util.Scanner;
+
+
+
 
 public class ImageResolver {
 
@@ -67,6 +72,33 @@ public class ImageResolver {
 
     }
 
+    public void modifySVG() throws FileNotFoundException, IOException {
+        String filePath = new File("").getAbsolutePath();
+        filePath = filePath + "/src/main/webapp/status/build-coverage-flat.svg";
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            String everything = sb.toString();
+            String modifiedColor = everything.replace("{hex-color-to-change}", "#97CA00");
+            String modifiedPercentage = modifiedColor.replace("{code-coverage-to-change}", "90");
+            FileWriter fw = new FileWriter(filePath);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(modifiedPercentage);
+            bw.close();
+            System.out.println(modifiedPercentage);
+        } finally {
+            br.close();
+        }
+    }
+    
+
     public StatusImage getImage(BallColor color) {
         return getImage(color, "default");
     }
@@ -81,6 +113,12 @@ public class ImageResolver {
 
         if (style != null){
             if (style.equals("codeCoverage")){
+                try {
+                    System.out.println("Yah I entered this try function for codeCoverage");
+                    modifySVG();
+                } catch (Exception ex) {
+                    System.out.println("no file found");
+                }
                 return images[0];
             }
         }
