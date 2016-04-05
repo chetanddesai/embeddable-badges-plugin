@@ -87,6 +87,20 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         return null;
     }
 
+    
+    /**
+     * Serves the badge image.
+     * @throws IOException 
+     */
+    public HttpResponse doCoverage(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String build, @QueryParameter String style) throws IOException {
+    	if(build != null) {
+            Run run = getRun(job, build);
+            return iconResolver.getCoverageImage();
+        } else {
+            Job<?, ?> project = getProject(job);
+            return iconResolver.getCoverageImage();
+        }
+    }
     /**
      * Serves the badge image.
      */

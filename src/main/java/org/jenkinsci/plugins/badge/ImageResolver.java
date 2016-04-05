@@ -80,6 +80,17 @@ public class ImageResolver {
         // paste results to the modifiedPercentage
         // need to make the .replace continue to modify the same file. need to add a marker in the orig .svg
     }
+    
+    public StatusImage getCoverageImage() {
+    	// cobertura or clover
+    	try {
+			return new StatusImage("build-coverage-flat.svg");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return null;
+    }
 
 
 
