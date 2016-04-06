@@ -5,7 +5,7 @@ def st = namespace("jelly:stapler")
 
 l.layout {
     l.main_panel {
-        h2(_("Embeddable Build Status Icon"))
+        h2(_("Embeddable Badges"))
         p(raw(_("blurb")))
         raw("""
 <p>
