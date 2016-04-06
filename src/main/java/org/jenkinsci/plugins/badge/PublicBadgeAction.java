@@ -55,9 +55,9 @@ import org.kohsuke.stapler.StaplerResponse;
 
 /**
  * Exposes the build status badge via unprotected URL.
- * 
+ *
  * The status of a job can be checked like this:
- * 
+ *
  * <li>http://localhost:8080/buildstatus/icon?job=[JOBNAME] <li>e.g. http://localhost:8080/buildstatus/icon?job=free1 <br/>
  * <br/>
  *
@@ -68,14 +68,13 @@ import org.kohsuke.stapler.StaplerResponse;
  *
  * Even though the URL is unprotected, the user does still need the 'ViewStatus' permission on the given Job. If you want the status icons to be public readable/accessible, just grant the 'ViewStatus'
  * permission globally to 'anonymous'.
- * 
+ *
  * @author Dominik Bartholdi (imod)
  */
 @Extension
 public class PublicBadgeAction implements UnprotectedRootAction {
 
     public final static Permission VIEW_STATUS = new Permission(Item.PERMISSIONS, "ViewStatus", Messages._ViewStatus_Permission(), Item.READ, PermissionScope.ITEM);
-
     private final ImageResolver iconResolver;
 
     public PublicBadgeAction() throws IOException {
@@ -94,14 +93,25 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         return null;
     }
 
-    
+
     /**
      * Serves the codeCoverage badge image.
      */
     public HttpResponse doCoverage(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String build, @QueryParameter String style) {
     	if(build != null) {
             Run run = getRun(job, build);
-            return iconResolver.getCoverageImage();
+            Integer codeCoverage = null;
+            // Checks for Cobertura
+            CoberturaBuildAction coverageAction = run.getAction(CoberturaBuildAction.class);
+            if(coverageAction != null){
+              codeCoverage = coverageAction.getBuildHealth().getScore();
+            }
+            // Checks for Clover
+            CloverBuildAction cloverAction = run.getAction(CloverBuildAction.class);
+            if (cloverAction != null){
+              codeCoverage = cloverAction.getBuildHealth().getScore();
+            }
+            return iconResolver.getCoverageImage(codeCoverage);
         } else {
             Job<?, ?> project = getProject(job);
             return iconResolver.getCoverageImage();
@@ -133,12 +143,11 @@ public class PublicBadgeAction implements UnprotectedRootAction {
 
         // check if user has permission to view the status
         if(p == null || !(p.hasPermission(VIEW_STATUS))){
-            throw HttpResponses.notFound();            
+            throw HttpResponses.notFound();
         }
-        
+
         return p;
     }
-
     private Run<?, ?> getRun(String job, String build) {
         Run<?, ?> run;
 
@@ -157,4 +166,5 @@ public class PublicBadgeAction implements UnprotectedRootAction {
 
         return run;
     }
+
 }

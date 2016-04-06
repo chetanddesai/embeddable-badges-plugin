@@ -75,13 +75,13 @@ public class ImageResolver {
     public void getCodeCoverage(){
         // TO DO:
         // check if they are using Clover or Cobertura or Junit
-        // Get the results. 
+        // Get the results.
         // If the results is in a range set the replace hex color in modifiedColor
         // paste results to the modifiedPercentage
         // need to make the .replace continue to modify the same file. need to add a marker in the orig .svg
     }
-    
-    public StatusImage getCoverageImage() {
+    //Run Method
+    public StatusImage getCoverageImage(Integer codeCoverage) {
     	// cobertura or clover
     	try {
 			return new StatusImage("build-coverage-flat.svg");
@@ -90,6 +90,17 @@ public class ImageResolver {
 			e.printStackTrace();
 		}
     	return null;
+    }
+    //Project Method
+    public StatusImage getCoverageImage() {
+      // cobertura or clover
+      try {
+      return new StatusImage("build-coverage-flat.svg");
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+      return null;
     }
 
 
@@ -119,7 +130,7 @@ public class ImageResolver {
             br.close();
         }
     }
-    
+
 
     public StatusImage getImage(BallColor color) {
         return getImage(color, "default");
@@ -156,7 +167,7 @@ public class ImageResolver {
             return images[4];
         default:
             return images[5];
-            
+
         }
     }
 
