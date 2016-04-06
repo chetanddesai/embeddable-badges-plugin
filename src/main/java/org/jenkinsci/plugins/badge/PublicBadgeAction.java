@@ -33,6 +33,13 @@ import hudson.security.Permission;
 import hudson.security.PermissionScope;
 import hudson.util.HttpResponses;
 
+// new stuff to import for code coverage
+import hudson.model.AbstractBuild;
+import hudson.plugins.clover.CloverBuildAction;
+import hudson.plugins.cobertura.Ratio;
+import hudson.plugins.cobertura.CoberturaBuildAction;
+import hudson.plugins.cobertura.targets.CoverageMetric;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -89,10 +96,9 @@ public class PublicBadgeAction implements UnprotectedRootAction {
 
     
     /**
-     * Serves the badge image.
-     * @throws IOException 
+     * Serves the codeCoverage badge image.
      */
-    public HttpResponse doCoverage(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String build, @QueryParameter String style) throws IOException {
+    public HttpResponse doCoverage(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String build, @QueryParameter String style) {
     	if(build != null) {
             Run run = getRun(job, build);
             return iconResolver.getCoverageImage();
@@ -102,7 +108,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         }
     }
     /**
-     * Serves the badge image.
+     * Serves the buildResult badge image.
      */
     public HttpResponse doIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String build, @QueryParameter String style) {
         if(build != null) {

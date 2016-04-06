@@ -36,17 +36,16 @@ public class BadgeAction implements Action {
     }
 
     /**
-     * Serves the badge image.
+     * Serves the buildResult badge image.
      */
     public HttpResponse doIcon(@QueryParameter String style) {
         return factory.getImage(project.getIconColor(), style);
     }
     
     /**
-     * Serves the badge image.
-     * @throws IOException 
+     * Serves the codeCoverage badge image.
      */
-    public HttpResponse doCoverage(@QueryParameter String style) throws IOException {
+    public HttpResponse doCoverage(@QueryParameter String style) {
         return factory.getCoverageImage();
     }
 }
