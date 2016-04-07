@@ -32,25 +32,25 @@ l.layout {
 
         def fullJobName = h.escape(my.project.fullName);
         def jobUrlWithoutView =  "${app.rootUrl}job/${fullJobName}";
-        def buildStatus = "${app.rootUrl}buildStatus/icon?job=${fullJobName}";
-        def coverage = "${app.rootUrl}buildStatus/coverage?job=${fullJobName}"
+        def buildStatus = "${app.rootUrl}buildStatus/buildIcon?job=${fullJobName}";
+        def coverage = "${app.rootUrl}buildStatus/coverageIcon?job=${fullJobName}"
 
 		h2(_("Build Status"))
 		h3 {
             img(id:"buildStatus",src:buildStatus)
         }
-        
+
         h3(_("Markdown"))
         input(type:"text",value:"[![Build Status](${buildStatus})](${jobUrlWithoutView})",class:"select-all")
 
         h3(_("Confluence"))
         input(type:"text",value:"[!${buildStatus}!|${jobUrlWithoutView}]",class:"select-all")
-        
+
         h2(_("Code Coverage"))
         h3 {
             img(id:"coverage",src:coverage)
         }
-        
+
         h3(_("Markdown"))
         input(type:"text",value:"[![Code Coverage](${coverage})](${jobUrlWithoutView})",class:"select-all")
 

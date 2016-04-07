@@ -97,7 +97,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     /**
      * Serves the codeCoverage badge image.
      */
-    public HttpResponse doCoverage(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String build, @QueryParameter String style) {
+    public HttpResponse doCoverageIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String build, @QueryParameter String style) {
     	if(build != null) {
             Run run = getRun(job, build);
             Integer codeCoverage = null;
@@ -120,7 +120,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     /**
      * Serves the buildResult badge image.
      */
-    public HttpResponse doIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String build, @QueryParameter String style) {
+    public HttpResponse doBuildIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String build, @QueryParameter String style) {
         if(build != null) {
             Run run = getRun(job, build);
             return iconResolver.getImage(run.getIconColor(), style);

@@ -38,14 +38,14 @@ public class BadgeAction implements Action {
     /**
      * Serves the buildResult badge image.
      */
-    public HttpResponse doIcon(@QueryParameter String style) {
+    public HttpResponse doBuildIcon(@QueryParameter String style) {
         return factory.getImage(project.getIconColor(), style);
     }
-    
+
     /**
      * Serves the codeCoverage badge image.
      */
-    public HttpResponse doCoverage(@QueryParameter String style) {
+    public HttpResponse doCoverageIcon(@QueryParameter String style) {
         return factory.getCoverageImage();
     }
 }
