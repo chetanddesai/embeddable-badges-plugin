@@ -55,16 +55,16 @@ public class PublicBadgeActionTest {
         wc.login("alice", "alice");
         try {
             // try with wrong job name
-            wc.goTo("buildStatus/icon?job=dummy");
+            wc.goTo("buildStatus/buildIcon?job=dummy");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
             assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
         }
-        wc.goTo("buildStatus/icon?job=free", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=free", "image/svg+xml");
         j.buildAndAssertSuccess(project);
-        wc.goTo("buildStatus/icon?job=free&build=1", "image/svg+xml");
-        wc.goTo("buildStatus/icon?job=free&build=1&style=plastic", "image/svg+xml");
-        wc.goTo("buildStatus/icon?job=free&build=1&style=unknown", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=free&build=1", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=free&build=1&style=plastic", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=free&build=1&style=unknown", "image/svg+xml");
     }
 
     @PresetData(PresetData.DataSet.NO_ANONYMOUS_READACCESS)
@@ -74,7 +74,7 @@ public class PublicBadgeActionTest {
         JenkinsRule.WebClient wc = j.createWebClient();
         try {
             // try with wrong job name
-            wc.goTo("buildStatus/icon?job=dummy");
+            wc.goTo("buildStatus/buildIcon?job=dummy");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
             assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
@@ -82,7 +82,7 @@ public class PublicBadgeActionTest {
 
         try {
             // try with correct job name
-            wc.goTo("buildStatus/icon?job=free", "image/svg+xml");
+            wc.goTo("buildStatus/buildIcon?job=free", "image/svg+xml");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
             // make sure return code does not leak security relevant information (must 404)
@@ -93,7 +93,7 @@ public class PublicBadgeActionTest {
 
         try {
             // try with correct job name
-            wc.goTo("buildStatus/icon?job=free&build=1", "image/svg+xml");
+            wc.goTo("buildStatus/buildIcon?job=free&build=1", "image/svg+xml");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
             // make sure return code does not leak security relevant information (must 404)
@@ -116,7 +116,7 @@ public class PublicBadgeActionTest {
         JenkinsRule.WebClient wc = j.createWebClient();
         try {
             // try with wrong job name
-            wc.goTo("buildStatus/icon?job=dummy");
+            wc.goTo("buildStatus/buildIcon?job=dummy");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
             assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
@@ -124,16 +124,16 @@ public class PublicBadgeActionTest {
 
         try {
             // try with wrong job name
-            wc.goTo("buildStatus/icon?job=free&build=1");
+            wc.goTo("buildStatus/buildIcon?job=free&build=1");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
             assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
         }
-        
-        wc.goTo("buildStatus/icon?job=free", "image/svg+xml");
+
+        wc.goTo("buildStatus/buildIcon?job=free", "image/svg+xml");
         j.buildAndAssertSuccess(project);
-        wc.goTo("buildStatus/icon?job=free&build=1", "image/svg+xml");
-        wc.goTo("buildStatus/icon?job=free&build=1&style=codeCoverage", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=free&build=1", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=free&build=1&style=codeCoverage", "image/svg+xml");
     }
 
     @PresetData(PresetData.DataSet.ANONYMOUS_READONLY)
@@ -143,7 +143,7 @@ public class PublicBadgeActionTest {
         JenkinsRule.WebClient wc = j.createWebClient();
         try {
             // try with wrong job name
-            wc.goTo("buildStatus/icon?job=dummy");
+            wc.goTo("buildStatus/buildIcon?job=dummy");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
             assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
@@ -151,15 +151,15 @@ public class PublicBadgeActionTest {
 
         try {
             // try with wrong job name
-            wc.goTo("buildStatus/icon?job=free&build=1");
+            wc.goTo("buildStatus/buildIcon?job=free&build=1");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
             assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
         }
 
         // try with correct job name
-        wc.goTo("buildStatus/icon?job=free", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=free", "image/svg+xml");
         j.buildAndAssertSuccess(project);
-        wc.goTo("buildStatus/icon?job=free&build=1", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=free&build=1", "image/svg+xml");
     }
 }
