@@ -65,6 +65,8 @@ public class ImageResolver {
     //Run Method
     public StatusImage getCoverageImage(Integer codeCoverage) {
     	// cobertura or clover
+    	System.out.println("Code Coverage from Cobertura or Clover");
+    	System.out.println(codeCoverage);
 			return codeCoverageImages[0];
     }
     //Project Method
@@ -75,7 +77,7 @@ public class ImageResolver {
 
 
 
-    public void modifySVG() throws FileNotFoundException, IOException {
+    public void modifySVG(String imageType) throws FileNotFoundException, IOException {
         String filePath = new File("").getAbsolutePath();
         filePath = filePath + "/src/main/webapp/status/build-coverage-flat.svg";
         BufferedReader br = new BufferedReader(new FileReader(filePath));
