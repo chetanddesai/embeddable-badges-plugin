@@ -1,7 +1,5 @@
 package org.jenkinsci.plugins.badge;
 
-import java.io.IOException;
-
 import hudson.model.Action;
 import hudson.model.Job;
 import jenkins.model.Jenkins;
@@ -40,12 +38,5 @@ public class BadgeAction implements Action {
      */
     public HttpResponse doBuildIcon(@QueryParameter String style) {
         return factory.getImage(project.getIconColor(), style);
-    }
-
-    /**
-     * Serves the codeCoverage badge image.
-     */
-    public HttpResponse doCoverageIcon(@QueryParameter String style) {
-        return factory.getCoverageImage();
     }
 }
