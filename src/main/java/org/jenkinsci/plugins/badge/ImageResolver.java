@@ -25,18 +25,28 @@ package org.jenkinsci.plugins.badge;
 
 import hudson.model.BallColor;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.io.*;
-import java.util.Scanner;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import jenkins.model.Jenkins;
 
-
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 public class ImageResolver {
 
     private final HashMap<String, StatusImage[]> styles;
     private final StatusImage[] defaultStyle;
+    public static final String COVERAGE_BASE_URL = "https://img.shields.io/badge/coverage";
+    public static final String RED = "#cc0000";
+    public static final String YELLOW = "#b2b200";
+    public static final String GREEN = "#008000";
+    public static final String GREY = "#808080";
+    
 
     public ImageResolver() throws IOException{
         styles = new HashMap<String, StatusImage[]>();
@@ -63,76 +73,69 @@ public class ImageResolver {
         // Pick a default style
         defaultStyle = flatImages;
         styles.put("default", defaultStyle);
-
-        // shields.io code-coverage-badges
-        StatusImage[] codeCoverageImages = new StatusImage[] {
-                new StatusImage("build-coverage-flat.svg")
-        };
-        styles.put("codeCoverage", codeCoverageImages);
-
     }
 
-    public void getCodeCoverage(){
-        // TO DO:
-        // check if they are using Clover or Cobertura or Junit
-        // Get the results.
-        // If the results is in a range set the replace hex color in modifiedColor
-        // paste results to the modifiedPercentage
-        // need to make the .replace continue to modify the same file. need to add a marker in the orig .svg
-    }
-    //Run Method
     public StatusImage getCoverageImage(Integer codeCoverage) {
-    	// cobertura or clover
-    	try {
-			return new StatusImage("build-coverage-flat.svg");
+    	
+    	// TODO: don't read file everytime, store this as a static variable in memory with the constructor
+    	URL image = null;
+		try {
+			image = new URL(
+			        Jenkins.getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
+			        "status/build-coverage-flat.svg");
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+        StringBuilder sb = null;
+		try {
+			sb = new StringBuilder(IOUtils.toString(image.openStream()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	return null;
-    }
-    //Project Method
-    public StatusImage getCoverageImage() {
-      // cobertura or clover
-      try {
-      return new StatusImage("build-coverage-flat.svg");
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-      return null;
-    }
+        
 
-
-
-    public void modifySVG() throws FileNotFoundException, IOException {
-        String filePath = new File("").getAbsolutePath();
-        filePath = filePath + "/src/main/webapp/status/build-coverage-flat.svg";
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        String replacedImage = replaceSVG(sb.toString(), codeCoverage);
+        InputStream is = IOUtils.toInputStream(replacedImage);
+        String etag = "status/build-coverage-flat.svg" + codeCoverage;
+        
         try {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
+			return new StatusImage(etag, is);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return null;
 
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-            String everything = sb.toString();
-            String modifiedColor = everything.replace("{hex-color-to-change}", "#97CA00");
-            String modifiedPercentage = modifiedColor.replace("{code-coverage-to-change}", "90");
-            FileWriter fw = new FileWriter(filePath);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(modifiedPercentage);
-            bw.close();
-            System.out.println(modifiedPercentage);
-        } finally {
-            br.close();
-        }
     }
 
+    private String replaceSVG(String image, Integer codeCoverage) {
+    	
+    	if (codeCoverage == null) {
+    		String modifiedColor = image.replace("{hex-color-to-change}", GREY);
+            return modifiedColor.replace("{code-coverage-to-change}","n/a");
+			
+		}
+		else {
+			if (codeCoverage.intValue() < 20) {
+				String modifiedColor = image.replace("{hex-color-to-change}", RED);
+				return modifiedColor.replace("{code-coverage-to-change}", codeCoverage.toString());
+			}
+			else if (codeCoverage.intValue() < 80) {
+				String modifiedColor = image.replace("{hex-color-to-change}", YELLOW);
+				return modifiedColor.replace("{code-coverage-to-change}", codeCoverage.toString());
+			}
+			else {
+				String modifiedColor = image.replace("{hex-color-to-change}", GREEN);
+				return modifiedColor.replace("{code-coverage-to-change}", codeCoverage.toString());
+			}
+		}
+		
+	}
 
-    public StatusImage getImage(BallColor color) {
+	public StatusImage getImage(BallColor color) {
         return getImage(color, "default");
     }
 
@@ -143,18 +146,6 @@ public class ImageResolver {
 
         if (color.isAnimated())
             return images[3];
-
-        if (style != null){
-            if (style.equals("codeCoverage")){
-                try {
-                    System.out.println("Yah I entered this try function for codeCoverage");
-                    modifySVG();
-                } catch (Exception ex) {
-                    System.out.println("no file found");
-                }
-                return images[0];
-            }
-        }
 
         switch (color) {
         case RED:

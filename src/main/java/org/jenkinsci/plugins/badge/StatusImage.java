@@ -54,6 +54,16 @@ class StatusImage implements HttpResponse {
         }
         length = Integer.toString(payload.length);
     }
+    
+    StatusImage(String etag, InputStream s) throws IOException {
+    	this.etag = etag;
+    	try {
+            payload = IOUtils.toByteArray(s);
+        } finally {
+            IOUtils.closeQuietly(s);
+        }
+        length = Integer.toString(payload.length);
+    }
 
     public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
         String v = req.getHeader("If-None-Match");

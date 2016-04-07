@@ -33,12 +33,15 @@ l.layout {
         def fullJobName = h.escape(my.project.fullName);
         def jobUrlWithoutView =  "${app.rootUrl}job/${fullJobName}";
         def buildStatus = "${app.rootUrl}buildStatus/buildIcon?job=${fullJobName}";
-        def coverage = "${app.rootUrl}buildStatus/coverageIcon?job=${fullJobName}"
+        def coverage = "${app.rootUrl}buildStatus/coverageIcon?job=${fullJobName}";
 
 		h2(_("Build Status"))
 		h3 {
             img(id:"buildStatus",src:buildStatus)
         }
+
+		h3(_("Direct URL"))
+		input(type:"text",value:buildStatus,class:"select-all")
 
         h3(_("Markdown"))
         input(type:"text",value:"[![Build Status](${buildStatus})](${jobUrlWithoutView})",class:"select-all")
@@ -50,6 +53,9 @@ l.layout {
         h3 {
             img(id:"coverage",src:coverage)
         }
+
+		h3(_("Direct URL"))
+		input(type:"text",value:coverage,class:"select-all")
 
         h3(_("Markdown"))
         input(type:"text",value:"[![Code Coverage](${coverage})](${jobUrlWithoutView})",class:"select-all")

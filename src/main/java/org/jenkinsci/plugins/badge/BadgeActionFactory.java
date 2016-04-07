@@ -31,10 +31,6 @@ public class BadgeActionFactory extends TransientActionFactory<Job> {
     public Collection<? extends Action> createFor(Job target) {
         return Collections.singleton(new BadgeAction(this,target));
     }
-
-    public StatusImage getCoverageImage() {
-    	return iconResolver.getCoverageImage();
-    }
     
     public StatusImage getImage(BallColor color) {
         return iconResolver.getImage(color);

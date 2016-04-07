@@ -33,16 +33,11 @@ import hudson.security.Permission;
 import hudson.security.PermissionScope;
 import hudson.util.HttpResponses;
 
-// new stuff to import for code coverage
-import hudson.model.AbstractBuild;
 import hudson.plugins.clover.CloverBuildAction;
-import hudson.plugins.cobertura.Ratio;
 import hudson.plugins.cobertura.CoberturaBuildAction;
-import hudson.plugins.cobertura.targets.CoverageMetric;
+import hudson.plugins.jacoco.JacocoBuildAction;
 
 import java.io.IOException;
-
-import javax.servlet.ServletException;
 
 import jenkins.model.Jenkins;
 
@@ -101,20 +96,44 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     	if(build != null) {
             Run run = getRun(job, build);
             Integer codeCoverage = null;
+            
             // Checks for Cobertura
             CoberturaBuildAction coverageAction = run.getAction(CoberturaBuildAction.class);
             if(coverageAction != null){
-              codeCoverage = coverageAction.getBuildHealth().getScore();
+              codeCoverage = new Integer(coverageAction.getBuildHealth().getScore());
             }
             // Checks for Clover
             CloverBuildAction cloverAction = run.getAction(CloverBuildAction.class);
             if (cloverAction != null){
-              codeCoverage = cloverAction.getBuildHealth().getScore();
+              codeCoverage = new Integer(cloverAction.getBuildHealth().getScore());
+            }
+            // Checks for Jacoco
+            JacocoBuildAction jacocoAction = run.getAction(JacocoBuildAction.class);
+            if (jacocoAction != null) {
+              codeCoverage = new Integer(jacocoAction.getInstructionCoverage().getPercentage());
             }
             return iconResolver.getCoverageImage(codeCoverage);
         } else {
             Job<?, ?> project = getProject(job);
-            return iconResolver.getCoverageImage();
+            Integer codeCoverage = null;
+            
+            // Checks for Cobertura
+            CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
+            if(coverageAction != null){
+              codeCoverage = new Integer(coverageAction.getBuildHealth().getScore());
+            }
+            // Checks for Clover
+            CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
+            if (cloverAction != null){
+              codeCoverage = new Integer(cloverAction.getBuildHealth().getScore());
+            }
+            // Checks for Jacoco
+            JacocoBuildAction jacocoAction = project.getLastSuccessfulBuild().getAction(JacocoBuildAction.class);
+            if (jacocoAction != null) {
+              codeCoverage = new Integer(jacocoAction.getInstructionCoverage().getPercentage());
+            }
+            
+            return iconResolver.getCoverageImage(codeCoverage);
         }
     }
     /**

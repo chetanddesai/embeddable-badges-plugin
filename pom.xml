@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.580.1</version>
+    <version>1.609.3</version>
   </parent>
 
   <artifactId>embeddable-badges</artifactId>
@@ -28,6 +28,13 @@
   <build>
     <plugins>
       <plugin>
+          <groupId>org.jenkins-ci.tools</groupId>
+          <artifactId>maven-hpi-plugin</artifactId>
+          <configuration>
+            <disabledTestInjection>true</disabledTestInjection>
+          </configuration>
+        </plugin> 
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5</version>
@@ -35,7 +42,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.5.201505241946</version>
+        <version>0.7.6.201602180812</version>
         <executions>
           <execution>
             <goals>
@@ -56,6 +63,7 @@
 
     <!-- Workflow plugin imports are used to test compatibility -->
   <dependencies>
+  	
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-aggregator</artifactId>
@@ -78,6 +86,17 @@
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>clover</artifactId>
       <version>4.6.0</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>2.4</version>
+	</dependency>
+	<dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>jacoco</artifactId>
+      <version>2.0.1</version>
       <optional>true</optional>
     </dependency>
   </dependencies>
