@@ -50,16 +50,6 @@ public class ImageResolver {
 
     public ImageResolver() throws IOException{
         styles = new HashMap<String, StatusImage[]>();
-        // shields.io "plastic" style (aka the old default)
-        StatusImage[] plasticImages = new StatusImage[] {
-                new StatusImage("build-failing-red.svg"),
-                new StatusImage("build-unstable-yellow.svg"),
-                new StatusImage("build-passing-brightgreen.svg"),
-                new StatusImage("build-running-blue.svg"),
-                new StatusImage("build-aborted-lightgrey.svg"),
-                new StatusImage("build-unknown-lightgrey.svg")
-        };
-        styles.put("plastic", plasticImages);
         // shields.io "flat" style (new default from Feb 1 2015)
         StatusImage[] flatImages = new StatusImage[] {
                 new StatusImage("build-failing-red-flat.svg"),
@@ -69,8 +59,6 @@ public class ImageResolver {
                 new StatusImage("build-aborted-lightgrey-flat.svg"),
                 new StatusImage("build-unknown-lightgrey-flat.svg")
         };
-        styles.put("flat", flatImages);
-        // Pick a default style
         defaultStyle = flatImages;
         styles.put("default", defaultStyle);
     }
@@ -97,7 +85,7 @@ public class ImageResolver {
 		}
         
 
-        String replacedImage = replaceSVG(sb.toString(), codeCoverage);
+        String replacedImage = replaceCodeCoverageSVG(sb.toString(), codeCoverage);
         InputStream is = IOUtils.toInputStream(replacedImage);
         String etag = "status/build-coverage-flat.svg" + codeCoverage;
         
@@ -111,7 +99,7 @@ public class ImageResolver {
 
     }
 
-    private String replaceSVG(String image, Integer codeCoverage) {
+    private String replaceCodeCoverageSVG(String image, Integer codeCoverage) {
     	
     	if (codeCoverage == null) {
     		String modifiedColor = image.replace("{hex-color-to-change}", GREY);
@@ -135,14 +123,71 @@ public class ImageResolver {
 		
 	}
 
-	public StatusImage getImage(BallColor color) {
-        return getImage(color, "default");
-    }
+        public StatusImage getTestResultImage(Integer testPass, Integer testTotal) {
+    	
+    	// TODO: don't read file everytime, store this as a static variable in memory with the constructor
+    	URL image = null;
+		try {
+			image = new URL(
+			        Jenkins.getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
+			        "status/build-test-result-flat.svg");
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+        StringBuilder sb = null;
+		try {
+			sb = new StringBuilder(IOUtils.toString(image.openStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
 
-    public StatusImage getImage(BallColor color, String style) {
-        StatusImage[] images = styles.get(style);
-        if (images == null)
-            images = defaultStyle;
+        String replacedImage = replaceTestResultSVG(sb.toString(), testPass, testTotal);
+        InputStream is = IOUtils.toInputStream(replacedImage);
+        String etag = "status/build-test-result-flat.svg" + testPass + testTotal;
+        
+        try {
+			return new StatusImage(etag, is);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return null;
+
+    }
+        
+        private String replaceTestResultSVG(String image, Integer testPass, Integer testTotal) {
+    	
+    	if (testTotal == null) {
+    		String modifiedColor = image.replace("{hex-color-to-change}", GREY);
+            return modifiedColor.replace("{passed-tests} / {total-tests}","n/a");
+			
+		}
+		else {
+			if (testPass.intValue() < 20) {
+				String modifiedColor = image.replace("{hex-color-to-change}", RED);
+                                String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
+				return modifiedPass.replace("{total-tests}", testTotal.toString());
+			}
+			else if (testPass.intValue() < 80) {
+				String modifiedColor = image.replace("{hex-color-to-change}", YELLOW);
+				String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
+				return modifiedPass.replace("{total-tests}", testTotal.toString());
+			}
+			else {
+				String modifiedColor = image.replace("{hex-color-to-change}", GREEN);
+				String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
+				return modifiedPass.replace("{total-tests}", testTotal.toString());
+			}
+		}
+		
+	}
+        
+    public StatusImage getImage(BallColor color) {
+        StatusImage[] images = styles.get("default");
 
         if (color.isAnimated())
             return images[3];
