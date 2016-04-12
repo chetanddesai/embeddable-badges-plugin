@@ -53,99 +53,143 @@ import org.kohsuke.stapler.StaplerResponse;
  *
  * The status of a job can be checked like this:
  *
- * <li>http://localhost:8080/buildstatus/icon?job=[JOBNAME] <li>e.g. http://localhost:8080/buildstatus/icon?job=free1 <br/>
+ * <li>http://localhost:8080/buildstatus/icon?job=[JOBNAME] <li>
+ * e.g. http://localhost:8080/buildstatus/icon?job=free1 <br/>
  * <br/>
  *
  * The status of a particular build can be checked like this:
  *
- * <li>http://localhost:8080/buildstatus/icon?job=[JOBNAME]&build=[BUILDNUMBER] <li>e.g. http://localhost:8080/buildstatus/icon?job=free1&build=5<br/>
- * <br/>
  *
- * Even though the URL is unprotected, the user does still need the 'ViewStatus' permission on the given Job. If you want the status icons to be public readable/accessible, just grant the 'ViewStatus'
- * permission globally to 'anonymous'.
+ * Even though the URL is unprotected, the user does still need the 'ViewStatus'
+ * permission on the given Job. If you want the status icons to be public
+ * readable/accessible, just grant the 'ViewStatus' permission globally to
+ * 'anonymous'.
  *
  * @author Dominik Bartholdi (imod)
  */
 @Extension
 public class PublicBadgeAction implements UnprotectedRootAction {
 
+    /**
+     *
+     */
     public final static Permission VIEW_STATUS = new Permission(Item.PERMISSIONS, "ViewStatus", Messages._ViewStatus_Permission(), Item.READ, PermissionScope.ITEM);
+    /**
+     *
+     */
     private final ImageResolver iconResolver;
 
+    /**
+     *
+     * @throws IOException
+     */
     public PublicBadgeAction() throws IOException {
         iconResolver = new ImageResolver();
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public String getUrlName() {
         return "buildStatus";
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public String getIconFileName() {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public String getDisplayName() {
         return null;
     }
 
-
     /**
      * Serves the codeCoverage badge image.
+     *
+     * @param req
+     * @param rsp
+     * @param job
+     * @return
      */
     public HttpResponse doCoverageIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
-    	Job<?, ?> project = getProject(job);
+        Job<?, ?> project = getProject(job);
         Integer codeCoverage = null;
 
-        
         if (project.getLastSuccessfulBuild() != null) {
             // Checks for Cobertura
             if (Jenkins.getInstance().pluginManager.getPlugin("cobertura").isActive()) {
                 CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
-                if(coverageAction != null){
-                  codeCoverage = new Integer(coverageAction.getBuildHealth().getScore());
+                if (coverageAction != null) {
+                    codeCoverage = coverageAction.getBuildHealth().getScore();
                 }
             }
-	        // Checks for Clover
+            // Checks for Clover
             //    if (Jenkins.getInstance().pluginManager.getPlugin("clover").isActive()) {
             //        CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
             //        if (cloverAction != null){
             //          codeCoverage = new Integer(cloverAction.getBuildHealth().getScore());
             //        }
             //    }
-	    // Checks for Jacoco
+            // Checks for Jacoco
             if (Jenkins.getInstance().pluginManager.getPlugin("jacoco").isActive()) {
-            JacocoBuildAction jacocoAction = project.getLastSuccessfulBuild().getAction(JacocoBuildAction.class);
-            if (jacocoAction != null) {
-                codeCoverage = new Integer(jacocoAction.getInstructionCoverage().getPercentage());
+                JacocoBuildAction jacocoAction = project.getLastSuccessfulBuild().getAction(JacocoBuildAction.class);
+                if (jacocoAction != null) {
+                    codeCoverage = jacocoAction.getInstructionCoverage().getPercentage();
+                }
             }
-        }
         }
 
         return iconResolver.getCoverageImage(codeCoverage);
 
     }
+
     /**
-     * Serves the testCoverage badge image.
-     * TO DO
+     * Serves the testCoverage badge image. TO DO
+     * @param req
+     * @param rsp
+     * @param job
+     * @return
      */
     public HttpResponse doTestIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
         Job<?, ?> project = getProject(job);
         return iconResolver.getImage(project.getIconColor());
 
     }
+
     /**
      * Serves the buildResult badge image.
+     * @param req
+     * @param rsp
+     * @param job
+     * @return
      */
     public HttpResponse doBuildIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
         Job<?, ?> project = getProject(job);
         return iconResolver.getImage(project.getIconColor());
 
     }
-
+    /** 
+     *
+     * @param job
+     * @return
+     */
     private Job<?, ?> getProject(String job) {
         Job<?, ?> p;
 
-        // as the user might have ViewStatus permission only (e.g. as anonymous) we get get the project impersonate and check for permission after getting the project
+        // as the user might have ViewStatus permission only (e.g. as anonymous)
+        // we get get the project impersonate and 
+        // check for permission after getting the project
         SecurityContext orig = ACL.impersonate(ACL.SYSTEM);
         try {
             p = Jenkins.getInstance().getItemByFullName(job, Job.class);
@@ -154,16 +198,24 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         }
 
         // check if user has permission to view the status
-        if(p == null || !(p.hasPermission(VIEW_STATUS))){
+        if (p == null || !(p.hasPermission(VIEW_STATUS))) {
             throw HttpResponses.notFound();
         }
 
         return p;
     }
+    /**
+     *
+     * @param job
+     * @param build
+     * @return
+     */
     private Run<?, ?> getRun(String job, String build) {
         Run<?, ?> run;
 
-        // as the user might have ViewStatus permission only (e.g. as anonymous) we get get the project impersonate and check for permission after getting the project
+        // as the user might have ViewStatus permission only (e.g. as anonymous)
+        // we get get the project impersonate and
+        // check for permission after getting the project
         SecurityContext orig = ACL.impersonate(ACL.SYSTEM);
         try {
             run = Jenkins.getInstance().getItemByFullName(job, Job.class).getBuildByNumber(Integer.parseInt(build));
@@ -172,7 +224,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         }
 
         // check if user has permission to view the status
-        if(run == null || !(run.hasPermission(VIEW_STATUS))){
+        if (run == null || !(run.hasPermission(VIEW_STATUS))) {
             throw HttpResponses.notFound();
         }
 
