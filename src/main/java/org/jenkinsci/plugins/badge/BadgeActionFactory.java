@@ -36,8 +36,4 @@ public class BadgeActionFactory extends TransientActionFactory<Job> {
         return iconResolver.getImage(color);
     }
 
-    public StatusImage getImage(BallColor color, String style) {
-        return iconResolver.getImage(color, style);
-    }
-
 }

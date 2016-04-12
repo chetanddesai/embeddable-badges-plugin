@@ -92,18 +92,19 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     /**
      * Serves the codeCoverage badge image.
      */
-    public HttpResponse doCoverageIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String style) {
+    public HttpResponse doCoverageIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
     	Job<?, ?> project = getProject(job);
         Integer codeCoverage = null;
 
-        // Checks for Cobertura
+        
         if (project.getLastSuccessfulBuild() != null) {
-	        if (Jenkins.getInstance().pluginManager.getPlugin("cobertura").isActive()) {
-                    CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
-                    if(coverageAction != null){
-                      codeCoverage = new Integer(coverageAction.getBuildHealth().getScore());
-                    }
+            // Checks for Cobertura
+            if (Jenkins.getInstance().pluginManager.getPlugin("cobertura").isActive()) {
+                CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
+                if(coverageAction != null){
+                  codeCoverage = new Integer(coverageAction.getBuildHealth().getScore());
                 }
+            }
 	        // Checks for Clover
             //    if (Jenkins.getInstance().pluginManager.getPlugin("clover").isActive()) {
             //        CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
@@ -111,24 +112,33 @@ public class PublicBadgeAction implements UnprotectedRootAction {
             //          codeCoverage = new Integer(cloverAction.getBuildHealth().getScore());
             //        }
             //    }
-	        // Checks for Jacoco
-                if (Jenkins.getInstance().pluginManager.getPlugin("jacoco").isActive()) {
-	                  JacocoBuildAction jacocoAction = project.getLastSuccessfulBuild().getAction(JacocoBuildAction.class);
-                    if (jacocoAction != null) {
-                      codeCoverage = new Integer(jacocoAction.getInstructionCoverage().getPercentage());
-                    }
-                }
+	    // Checks for Jacoco
+            if (Jenkins.getInstance().pluginManager.getPlugin("jacoco").isActive()) {
+            JacocoBuildAction jacocoAction = project.getLastSuccessfulBuild().getAction(JacocoBuildAction.class);
+            if (jacocoAction != null) {
+                codeCoverage = new Integer(jacocoAction.getInstructionCoverage().getPercentage());
+            }
+        }
         }
 
         return iconResolver.getCoverageImage(codeCoverage);
 
     }
     /**
+     * Serves the testCoverage badge image.
+     * TO DO
+     */
+    public HttpResponse doTestIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
+        Job<?, ?> project = getProject(job);
+        return iconResolver.getImage(project.getIconColor());
+
+    }
+    /**
      * Serves the buildResult badge image.
      */
-    public HttpResponse doBuildIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job, @QueryParameter String style) {
+    public HttpResponse doBuildIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
         Job<?, ?> project = getProject(job);
-        return iconResolver.getImage(project.getIconColor(), style);
+        return iconResolver.getImage(project.getIconColor());
 
     }
 

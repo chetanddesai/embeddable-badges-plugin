@@ -36,7 +36,7 @@ public class BadgeAction implements Action {
     /**
      * Serves the buildResult badge image.
      */
-    public HttpResponse doBuildIcon(@QueryParameter String style) {
-        return factory.getImage(project.getIconColor(), style);
+    public HttpResponse doBuildIcon() {
+        return factory.getImage(project.getIconColor());
     }
 }
