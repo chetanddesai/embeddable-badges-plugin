@@ -26,18 +26,24 @@ package org.jenkinsci.plugins.badge;
 import hudson.Plugin;
 
 /**
- * This plugin implementation only exists to force the loading of the permission in an early enough stage (see also JENKINS-4172). 
+ * This plugin implementation only exists to force the loading of the permission
+ * in an early enough stage (see also JENKINS-4172).
  * If the permission is not loaded early enough, Jenkins fails to load
  * permissions from config.
- * 
+ *
  * @author Dominik Bartholdi (imod)
  */
 public class PluginImpl extends Plugin {
 
+    /**
+     * TO DO
+     * @throws Exception
+     */
     @Override
     public void start() throws Exception {
         //
-        // As a work around, force loading of this permission so that by the time we start loading ACLs,
+        // As a work around, force loading of this permission so that by
+        // the time we start loading ACLs,
         // we have this instance already registered, thereby avoiding a lookup.
         PublicBadgeAction.VIEW_STATUS.toString();
     }

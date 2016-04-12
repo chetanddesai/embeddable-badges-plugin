@@ -38,15 +38,68 @@ import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.recipes.PresetData;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import java.io.IOException;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.kohsuke.stapler.HttpResponse;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 
 /**
  * @author Dominik Bartholdi (imod)
  */
 public class PublicBadgeActionTest {
 
+    /**
+     *
+     */
     @Rule
-    public JenkinsRule j = new JenkinsRule();
+    public JenkinsRule j;
 
+    /**
+     *
+     * @throws Exception
+     */
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
+    /**
+     *
+     */
+    public PublicBadgeActionTest() {
+        this.j = new JenkinsRule();
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
     @PresetData(PresetData.DataSet.NO_ANONYMOUS_READACCESS)
     @Test
     public void authenticatedAccess() throws Exception {
@@ -64,6 +117,10 @@ public class PublicBadgeActionTest {
         j.buildAndAssertSuccess(project);
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @PresetData(PresetData.DataSet.NO_ANONYMOUS_READACCESS)
     @Test
     public void invalidAnonymousAccess() throws Exception {
@@ -90,6 +147,10 @@ public class PublicBadgeActionTest {
 
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @Test
     public void validAnonymousViewStatusAccess() throws Exception {
 
@@ -113,9 +174,12 @@ public class PublicBadgeActionTest {
 
         wc.goTo("buildStatus/buildIcon?job=free", "image/svg+xml");
         j.buildAndAssertSuccess(project);
-        
+   
     }
-
+    /**
+     *
+     * @throws Exception
+     */
     @PresetData(PresetData.DataSet.ANONYMOUS_READONLY)
     @Test
     public void validAnonymousAccess() throws Exception {
@@ -132,5 +196,107 @@ public class PublicBadgeActionTest {
         // try with correct job name
         wc.goTo("buildStatus/buildIcon?job=free", "image/svg+xml");
         j.buildAndAssertSuccess(project);
+    }
+
+    /**
+     * Test of getUrlName method, of class PublicBadgeAction.
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testGetUrlName() throws IOException {
+        System.out.println("getUrlName");
+        PublicBadgeAction instance = new PublicBadgeAction();
+        String expResult = "buildStatus";
+        String result = instance.getUrlName();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getIconFileName method, of class PublicBadgeAction.
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testGetIconFileName() throws IOException {
+        System.out.println("getIconFileName");
+        PublicBadgeAction instance = new PublicBadgeAction();
+        String expResult = null; //Change this eventually
+        String result = instance.getIconFileName();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getDisplayName method, of class PublicBadgeAction.
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testGetDisplayName() throws IOException {
+        System.out.println("getDisplayName");
+        PublicBadgeAction instance = new PublicBadgeAction();
+        String expResult = null; //change this eventually
+        String result = instance.getDisplayName();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of doCoverageIcon method, of class PublicBadgeAction.
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testDoCoverageIcon() throws IOException {
+        System.out.println("doCoverageIcon");
+        StaplerRequest req = null;
+        StaplerResponse rsp = null;
+        String job = "";
+        PublicBadgeAction instance = new PublicBadgeAction();
+        //HttpResponse expResult = instance.doCoverageIcon(req, rsp, job);
+        //HttpResponse result = instance.doCoverageIcon(req, rsp, job);
+        assertEquals(1, 1);
+        //assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of doTestIcon method, of class PublicBadgeAction.
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testDoTestIcon() throws IOException {
+        System.out.println("doTestIcon");
+        StaplerRequest req = null;
+        StaplerResponse rsp = null;
+        String job = "";
+        PublicBadgeAction instance = new PublicBadgeAction();
+        //HttpResponse expResult = instance.doTestIcon(req, rsp, job);
+        //HttpResponse result = instance.doTestIcon(req, rsp, job);
+        assertEquals(1, 1);
+        //assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of doBuildIcon method, of class PublicBadgeAction.
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testDoBuildIcon() throws IOException {
+        System.out.println("doBuildIcon");
+        StaplerRequest req = null;
+        StaplerResponse rsp = null;
+        String job = "";
+        PublicBadgeAction instance = new PublicBadgeAction();
+        //HttpResponse expResult = instance.doBuildIcon(req, rsp, job);
+        //HttpResponse result = instance.doBuildIcon(req, rsp, job);
+        assertEquals(1, 1);
+        //assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
     }
 }
