@@ -31,7 +31,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 class StatusImage implements HttpResponse {
 
     /**
-     *
+     * TO DO
      */
     private final byte[] payload;
 
@@ -48,7 +48,7 @@ class StatusImage implements HttpResponse {
     private final String length;
 
     /**
-     *
+     * TO DO
      * @param fileName
      * @throws IOException
      */
@@ -69,7 +69,7 @@ class StatusImage implements HttpResponse {
     }
 
     /**
-     *
+     * TO DO
      * @param etag
      * @param s
      * @throws IOException
@@ -84,7 +84,7 @@ class StatusImage implements HttpResponse {
         length = Integer.toString(payload.length);
     }
     /**
-     *
+     * TO DO
      * @param req
      * @param rsp
      * @param node

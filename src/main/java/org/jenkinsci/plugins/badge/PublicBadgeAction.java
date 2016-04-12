@@ -71,16 +71,16 @@ import org.kohsuke.stapler.StaplerResponse;
 public class PublicBadgeAction implements UnprotectedRootAction {
 
     /**
-     *
+     * TO DO
      */
     public final static Permission VIEW_STATUS = new Permission(Item.PERMISSIONS, "ViewStatus", Messages._ViewStatus_Permission(), Item.READ, PermissionScope.ITEM);
     /**
-     *
+     * TO DO
      */
     private final ImageResolver iconResolver;
 
     /**
-     *
+     * TO DO
      * @throws IOException
      */
     public PublicBadgeAction() throws IOException {
@@ -88,7 +88,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     }
 
     /**
-     *
+     * TO DO
      * @return
      */
     @Override
@@ -97,7 +97,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     }
 
     /**
-     *
+     * TO DO
      * @return
      */
     @Override
@@ -106,7 +106,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     }
 
     /**
-     *
+     * TO DO
      * @return
      */
     @Override
@@ -180,7 +180,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
 
     }
     /** 
-     *
+     * TO DO
      * @param job
      * @return
      */
@@ -205,7 +205,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         return p;
     }
     /**
-     *
+     * TO DO
      * @param job
      * @param build
      * @return

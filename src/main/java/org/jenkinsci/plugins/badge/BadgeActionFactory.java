@@ -17,12 +17,12 @@ import java.util.Collections;
 public class BadgeActionFactory extends TransientActionFactory<Job> {
 
     /**
-     *
+     * TO DO
      */
     private final ImageResolver iconResolver;
 
     /**
-     *
+     * TO DO
      * @throws IOException 
      */
     public BadgeActionFactory() throws IOException {
@@ -30,7 +30,7 @@ public class BadgeActionFactory extends TransientActionFactory<Job> {
     }
 
     /**
-     *
+     * TO DO
      * @return
      */
     @Override
@@ -39,7 +39,7 @@ public class BadgeActionFactory extends TransientActionFactory<Job> {
     }
 
     /**
-     *
+     * TO DO
      * @param target
      * @return
      */
@@ -48,7 +48,7 @@ public class BadgeActionFactory extends TransientActionFactory<Job> {
         return Collections.singleton(new BadgeAction(this,target));
     }
     /**
-     *
+     * TO DO
      * @param color
      * @return
      */

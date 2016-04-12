@@ -33,37 +33,37 @@ import java.net.URL;
 import jenkins.model.Jenkins;
 import org.apache.commons.io.IOUtils;
 /**
- *
+ * TO DO
  * @author dkersch
  */
 public class ImageResolver {
     /**
-     *
+     * TO DO
      */
     private final HashMap<String, StatusImage[]> styles;
     /**
-     *
+     * TO DO
      */
     private final StatusImage[] defaultStyle;
     /**
-     *
+     * TO DO
      */
     public static final String RED = "#cc0000";
     /**
-     *
+     * TO DO
      */
     public static final String YELLOW = "#b2b200";
     /**
-     *
+     * TO DO
      */
     public static final String GREEN = "#008000";
     /**
-     *
+     * TO DO
      */
     public static final String GREY = "#808080";
 
     /**
-     *
+     * TO DO
      * @throws IOException
      */
     public ImageResolver() throws IOException {
@@ -82,6 +82,11 @@ public class ImageResolver {
         styles.put("default", defaultStyle);
     }
 
+    /**
+     * TO DO
+     * @param codeCoverage
+     * @return
+     */
     public StatusImage getCoverageImage(Integer codeCoverage) {
 
         // TODO don't read file everytime, store this as a static variable in
@@ -118,7 +123,7 @@ public class ImageResolver {
 
     }
     /**
-     *
+     * TO DO
      * @param image
      * @param codeCoverage
      * @return
@@ -142,7 +147,7 @@ public class ImageResolver {
 
     }
     /**
-     *
+     * TO DO
      * @param testPass
      * @param testTotal
      * @return
@@ -183,7 +188,7 @@ public class ImageResolver {
 
     }
     /**
-     *
+     * TO DO
      * @param image
      * @param testPass
      * @param testTotal
@@ -211,7 +216,7 @@ public class ImageResolver {
 
     }
     /**
-     *
+     * TO DO
      * @param color
      * @return
      */
