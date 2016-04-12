@@ -7,19 +7,22 @@ import jenkins.model.Jenkins;
 import org.kohsuke.stapler.HttpResponse;
 
 /**
-* @author Kohsuke Kawaguchi
-*/
+ * @author Kohsuke Kawaguchi
+ */
 public class BadgeAction implements Action {
+
     /**
-     *
+     * TO DO
      */
     private final BadgeActionFactory factory;
 
     /**
-     *
+     * TO DO
      */
     public final Job project;
+
     /**
+     * TO DO
      *
      * @param factory
      * @param project
@@ -28,16 +31,19 @@ public class BadgeAction implements Action {
         this.factory = factory;
         this.project = project;
     }
+
     /**
+     * TO DO
      *
      * @return
      */
     @Override
     public String getIconFileName() {
-        return Jenkins.RESOURCE_PATH+"/plugin/embeddable-badges/images/24x24/shield.png";
+        return Jenkins.RESOURCE_PATH + "/plugin/embeddable-badges/images/24x24/shield.png";
     }
 
     /**
+     * TO DO
      *
      * @return
      */
@@ -47,6 +53,7 @@ public class BadgeAction implements Action {
     }
 
     /**
+     * TO DO
      *
      * @return
      */
@@ -57,6 +64,7 @@ public class BadgeAction implements Action {
 
     /**
      * Serves the buildResult badge image.
+     *
      * @return
      */
     public HttpResponse doBuildIcon() {
