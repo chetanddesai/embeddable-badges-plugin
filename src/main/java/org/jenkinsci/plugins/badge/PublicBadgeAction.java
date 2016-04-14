@@ -30,8 +30,8 @@ import hudson.model.UnprotectedRootAction;
 import hudson.security.ACL;
 import hudson.security.Permission;
 import hudson.security.PermissionScope;
+import hudson.tasks.test.AbstractTestResultAction;
 import hudson.util.HttpResponses;
-
 import hudson.plugins.clover.CloverBuildAction;
 import hudson.plugins.cobertura.CoberturaBuildAction;
 import hudson.plugins.jacoco.JacocoBuildAction;
@@ -166,8 +166,14 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         Integer testTotal = null;
 
         if (project.getLastSuccessfulBuild() != null) {
-            testPass = 1;
-            testTotal = 2;
+        	AbstractTestResultAction testAction =  project.getLastSuccessfulBuild().getAction(AbstractTestResultAction.class);
+			if(testAction != null){
+				int total = testAction.getTotalCount();
+				int pass = total - testAction.getFailCount();
+				
+				testTotal = new Integer(total);
+				testPass = new Integer(pass);
+			}
         }
         return iconResolver.getTestResultImage(testPass, testTotal);
     }

@@ -195,16 +195,18 @@ public class ImageResolver {
      * @return
      */
     private String replaceTestResultSVG(String image, Integer testPass, Integer testTotal) {
+    	
+    	int passPercent = (testPass / testTotal) * 100;
 
         if (testTotal == null) {
             String modifiedColor = image.replace("{hex-color-to-change}", GREY);
             return modifiedColor.replace("{passed-tests} / {total-tests}", "n/a");
 
-        } else if (testPass < 20) {
+        } else if (passPercent < 20) {
             String modifiedColor = image.replace("{hex-color-to-change}", RED);
             String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
             return modifiedPass.replace("{total-tests}", testTotal.toString());
-        } else if (testPass < 80) {
+        } else if (passPercent < 80) {
             String modifiedColor = image.replace("{hex-color-to-change}", YELLOW);
             String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
             return modifiedPass.replace("{total-tests}", testTotal.toString());
