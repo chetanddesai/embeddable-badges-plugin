@@ -26,7 +26,6 @@ package org.jenkinsci.plugins.badge;
 import hudson.Extension;
 import hudson.model.Item;
 import hudson.model.Job;
-import hudson.model.Run;
 import hudson.model.UnprotectedRootAction;
 import hudson.security.ACL;
 import hudson.security.Permission;
@@ -163,8 +162,14 @@ public class PublicBadgeAction implements UnprotectedRootAction {
      */
     public HttpResponse doTestIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
         Job<?, ?> project = getProject(job);
-        return iconResolver.getImage(project.getIconColor());
+        Integer testPass = null;
+        Integer testTotal = null;
 
+        if (project.getLastSuccessfulBuild() != null) {
+            testPass = 1;
+            testTotal = 2;
+        }
+        return iconResolver.getTestResultImage(testPass, testTotal);
     }
 
     /**
@@ -204,31 +209,4 @@ public class PublicBadgeAction implements UnprotectedRootAction {
 
         return p;
     }
-    /**
-     * TO DO
-     * @param job
-     * @param build
-     * @return
-     */
-    private Run<?, ?> getRun(String job, String build) {
-        Run<?, ?> run;
-
-        // as the user might have ViewStatus permission only (e.g. as anonymous)
-        // we get get the project impersonate and
-        // check for permission after getting the project
-        SecurityContext orig = ACL.impersonate(ACL.SYSTEM);
-        try {
-            run = Jenkins.getInstance().getItemByFullName(job, Job.class).getBuildByNumber(Integer.parseInt(build));
-        } finally {
-            SecurityContextHolder.setContext(orig);
-        }
-
-        // check if user has permission to view the status
-        if (run == null || !(run.hasPermission(VIEW_STATUS))) {
-            throw HttpResponses.notFound();
-        }
-
-        return run;
-    }
-
 }
