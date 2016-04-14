@@ -126,27 +126,48 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         Integer codeCoverage = null;
 
         if (project.getLastSuccessfulBuild() != null) {
-            // Checks for Cobertura
-            if (Jenkins.getInstance().pluginManager.getPlugin("cobertura").isActive()) {
-                CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
-                if (coverageAction != null) {
-                    codeCoverage = coverageAction.getBuildHealth().getScore();
-                }
-            }
-            // Checks for Clover
-            //    if (Jenkins.getInstance().pluginManager.getPlugin("clover").isActive()) {
-            //        CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
-            //        if (cloverAction != null){
-            //          codeCoverage = new Integer(cloverAction.getBuildHealth().getScore());
-            //        }
-            //    }
+            
             // Checks for Jacoco
-            if (Jenkins.getInstance().pluginManager.getPlugin("jacoco").isActive()) {
+            try{
+                Jenkins.getInstance().pluginManager.getPlugin("jacoco").isActive();
                 JacocoBuildAction jacocoAction = project.getLastSuccessfulBuild().getAction(JacocoBuildAction.class);
                 if (jacocoAction != null) {
+                    if (jacocoAction.getInstructionCoverage() != null){
                     codeCoverage = jacocoAction.getInstructionCoverage().getPercentage();
+                    }
                 }
             }
+            catch (NullPointerException e) {
+                System.out.println("Jacoco is not installed");
+                }
+            
+            // Checks for Cobertura
+            try {
+                Jenkins.getInstance().pluginManager.getPlugin("cobertura").isActive();
+                CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
+                if (coverageAction != null) {
+                    if (coverageAction.getBuildHealth() != null){
+                        codeCoverage = coverageAction.getBuildHealth().getScore();
+                    }
+                }
+            }
+            catch(NullPointerException e) {
+                    System.out.println("Cobertura is not installed");
+            }
+            // Checks for Clover
+                try {
+                    Jenkins.getInstance().pluginManager.getPlugin("clover").isActive();
+                    CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
+                    if (cloverAction != null){
+                        if (cloverAction.getBuildHealth() != null){
+                            codeCoverage = cloverAction.getBuildHealth().getScore();
+                        }
+                    }
+                }
+                catch (NullPointerException e) {
+                    System.out.println("Clover is not installed");
+                        }
+
         }
 
         return iconResolver.getCoverageImage(codeCoverage);
