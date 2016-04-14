@@ -32,7 +32,7 @@ public class WorkflowBadgeActionTest {
         job.setQuietPeriod(0);
         job.scheduleBuild();
         j.waitUntilNoActivityUpTo(5000);
-        wc.goTo("buildStatus/buildIcon?job=wf&build=1", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=wf", "image/svg+xml");
     }
 
     @Test
@@ -48,7 +48,7 @@ public class WorkflowBadgeActionTest {
         WorkflowJob job = j.getInstance().createProject(WorkflowJob.class, "wf");
         job.setDefinition(new CpsFlowDefinition("println('hello')"));
         JenkinsRule.WebClient wc = j.createWebClient();
-        wc.goTo("buildStatus/buildIcon?job=wf&", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=wf", "image/svg+xml");
     }
 
     @PresetData(PresetData.DataSet.ANONYMOUS_READONLY)
@@ -57,6 +57,6 @@ public class WorkflowBadgeActionTest {
         WorkflowJob job = j.getInstance().createProject(WorkflowJob.class, "wf");
         job.setDefinition(new CpsFlowDefinition("println('hello')"));
         JenkinsRule.WebClient wc = j.createWebClient();
-        wc.goTo("buildStatus/buildIcon?job=wf&", "image/svg+xml");
+        wc.goTo("buildStatus/buildIcon?job=wf", "image/svg+xml");
     }
 }

@@ -16,28 +16,44 @@ import java.util.Collections;
 @Extension
 public class BadgeActionFactory extends TransientActionFactory<Job> {
 
+    /**
+     * TO DO
+     */
     private final ImageResolver iconResolver;
 
+    /**
+     * TO DO
+     * @throws IOException 
+     */
     public BadgeActionFactory() throws IOException {
         iconResolver = new ImageResolver();
     }
 
+    /**
+     * TO DO
+     * @return
+     */
     @Override
     public Class<Job> type() {
         return Job.class;
     }
 
+    /**
+     * TO DO
+     * @param target
+     * @return
+     */
     @Override
     public Collection<? extends Action> createFor(Job target) {
         return Collections.singleton(new BadgeAction(this,target));
     }
-    
+    /**
+     * TO DO
+     * @param color
+     * @return
+     */
     public StatusImage getImage(BallColor color) {
         return iconResolver.getImage(color);
-    }
-
-    public StatusImage getImage(BallColor color, String style) {
-        return iconResolver.getImage(color, style);
     }
 
 }
