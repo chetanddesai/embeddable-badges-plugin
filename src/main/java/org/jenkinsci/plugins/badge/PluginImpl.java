@@ -24,6 +24,7 @@
 package org.jenkinsci.plugins.badge;
 
 import hudson.Plugin;
+import static org.jenkinsci.plugins.badge.PublicBadgeAction.VIEW_STATUS;
 
 /**
  * This plugin implementation only exists to force the loading of the permission
@@ -45,7 +46,7 @@ public class PluginImpl extends Plugin {
         // As a work around, force loading of this permission so that by
         // the time we start loading ACLs,
         // we have this instance already registered, thereby avoiding a lookup.
-        PublicBadgeAction.VIEW_STATUS.toString();
+        VIEW_STATUS.toString();
     }
 
 }

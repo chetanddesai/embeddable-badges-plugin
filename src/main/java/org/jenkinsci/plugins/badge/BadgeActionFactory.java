@@ -4,11 +4,10 @@ import hudson.Extension;
 import hudson.model.Action;
 import hudson.model.BallColor;
 import hudson.model.Job;
-import jenkins.model.TransientActionFactory;
-
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
+import static java.util.Collections.singleton;
+import jenkins.model.TransientActionFactory;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -45,7 +44,7 @@ public class BadgeActionFactory extends TransientActionFactory<Job> {
      */
     @Override
     public Collection<? extends Action> createFor(Job target) {
-        return Collections.singleton(new BadgeAction(this,target));
+        return singleton(new BadgeAction(this,target));
     }
     /**
      * TO DO
