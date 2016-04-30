@@ -23,27 +23,26 @@
  */
 package org.jenkinsci.plugins.badge;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import hudson.model.FreeStyleProject;
 import hudson.security.GlobalMatrixAuthorizationStrategy;
 import hudson.security.SecurityRealm;
-
-import java.net.HttpURLConnection;
-
+import java.io.IOException;
+import static java.lang.System.out;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static org.jenkinsci.plugins.badge.PublicBadgeAction.VIEW_STATUS;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.recipes.PresetData;
-
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import java.io.IOException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.kohsuke.stapler.HttpResponse;
+import static org.jvnet.hudson.test.recipes.PresetData.DataSet.ANONYMOUS_READONLY;
+import static org.jvnet.hudson.test.recipes.PresetData.DataSet.NO_ANONYMOUS_READACCESS;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -100,7 +99,7 @@ public class PublicBadgeActionTest {
      *
      * @throws Exception
      */
-    @PresetData(PresetData.DataSet.NO_ANONYMOUS_READACCESS)
+    @PresetData(NO_ANONYMOUS_READACCESS)
     @Test
     public void authenticatedAccess() throws Exception {
         final FreeStyleProject project = j.createFreeStyleProject("free");
@@ -111,7 +110,7 @@ public class PublicBadgeActionTest {
             wc.goTo("buildStatus/buildIcon?job=dummy");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
-            assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
+            assertEquals(HTTP_NOT_FOUND, x.getStatusCode());
         }
         wc.goTo("buildStatus/buildIcon?job=free", "image/svg+xml");
         j.buildAndAssertSuccess(project);
@@ -121,7 +120,7 @@ public class PublicBadgeActionTest {
      *
      * @throws Exception
      */
-    @PresetData(PresetData.DataSet.NO_ANONYMOUS_READACCESS)
+    @PresetData(NO_ANONYMOUS_READACCESS)
     @Test
     public void invalidAnonymousAccess() throws Exception {
         final FreeStyleProject project = j.createFreeStyleProject("free");
@@ -131,7 +130,7 @@ public class PublicBadgeActionTest {
             wc.goTo("buildStatus/buildIcon?job=dummy");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
-            assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
+            assertEquals(HTTP_NOT_FOUND, x.getStatusCode());
         }
 
         try {
@@ -140,7 +139,7 @@ public class PublicBadgeActionTest {
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
             // make sure return code does not leak security relevant information (must 404)
-            assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
+            assertEquals(HTTP_NOT_FOUND, x.getStatusCode());
         }
 
         j.buildAndAssertSuccess(project);
@@ -157,7 +156,7 @@ public class PublicBadgeActionTest {
         final SecurityRealm realm = j.createDummySecurityRealm();
         j.jenkins.setSecurityRealm(realm);
         GlobalMatrixAuthorizationStrategy auth = new GlobalMatrixAuthorizationStrategy();
-        auth.add(PublicBadgeAction.VIEW_STATUS, "anonymous");
+        auth.add(VIEW_STATUS, "anonymous");
         j.getInstance().setSecurityRealm(realm);
         j.getInstance().setAuthorizationStrategy(auth);
 
@@ -169,7 +168,7 @@ public class PublicBadgeActionTest {
             wc.goTo("buildStatus/buildIcon?job=dummy");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
-            assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
+            assertEquals(HTTP_NOT_FOUND, x.getStatusCode());
         }
 
         wc.goTo("buildStatus/buildIcon?job=free", "image/svg+xml");
@@ -180,7 +179,7 @@ public class PublicBadgeActionTest {
      *
      * @throws Exception
      */
-    @PresetData(PresetData.DataSet.ANONYMOUS_READONLY)
+    @PresetData(ANONYMOUS_READONLY)
     @Test
     public void validAnonymousAccess() throws Exception {
         final FreeStyleProject project = j.createFreeStyleProject("free");
@@ -190,7 +189,7 @@ public class PublicBadgeActionTest {
             wc.goTo("buildStatus/buildIcon?job=dummy");
             fail("should fail, because there is no job with this name");
         } catch (FailingHttpStatusCodeException x) {
-            assertEquals(HttpURLConnection.HTTP_NOT_FOUND, x.getStatusCode());
+            assertEquals(HTTP_NOT_FOUND, x.getStatusCode());
         }
 
         // try with correct job name
@@ -204,7 +203,7 @@ public class PublicBadgeActionTest {
      */
     @Test
     public void testGetUrlName() throws IOException {
-        System.out.println("getUrlName");
+        out.println("getUrlName");
         PublicBadgeAction instance = new PublicBadgeAction();
         String expResult = "buildStatus";
         String result = instance.getUrlName();
@@ -219,7 +218,7 @@ public class PublicBadgeActionTest {
      */
     @Test
     public void testGetIconFileName() throws IOException {
-        System.out.println("getIconFileName");
+        out.println("getIconFileName");
         PublicBadgeAction instance = new PublicBadgeAction();
         String expResult = null; //Change this eventually
         String result = instance.getIconFileName();
@@ -234,7 +233,7 @@ public class PublicBadgeActionTest {
      */
     @Test
     public void testGetDisplayName() throws IOException {
-        System.out.println("getDisplayName");
+        out.println("getDisplayName");
         PublicBadgeAction instance = new PublicBadgeAction();
         String expResult = null; //change this eventually
         String result = instance.getDisplayName();
@@ -249,7 +248,7 @@ public class PublicBadgeActionTest {
      */
     @Test
     public void testDoCoverageIcon() throws IOException {
-        System.out.println("doCoverageIcon");
+        out.println("doCoverageIcon");
         StaplerRequest req = null;
         StaplerResponse rsp = null;
         String job = "";
@@ -268,7 +267,7 @@ public class PublicBadgeActionTest {
      */
     @Test
     public void testDoTestIcon() throws IOException {
-        System.out.println("doTestIcon");
+        out.println("doTestIcon");
         StaplerRequest req = null;
         StaplerResponse rsp = null;
         String job = "";
@@ -287,7 +286,7 @@ public class PublicBadgeActionTest {
      */
     @Test
     public void testDoBuildIcon() throws IOException {
-        System.out.println("doBuildIcon");
+        out.println("doBuildIcon");
         StaplerRequest req = null;
         StaplerResponse rsp = null;
         String job = "";

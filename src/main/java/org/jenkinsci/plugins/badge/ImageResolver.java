@@ -26,12 +26,12 @@ package org.jenkinsci.plugins.badge;
 import hudson.model.BallColor;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import jenkins.model.Jenkins;
+import java.util.HashMap;
+import static jenkins.model.Jenkins.getInstance;
 import org.apache.commons.io.IOUtils;
+import static org.apache.commons.io.IOUtils.toInputStream;
 /**
  * TO DO
  * @author dkersch
@@ -94,7 +94,7 @@ public class ImageResolver {
         URL image = null;
         try {
             image = new URL(
-                    Jenkins.getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
+                    getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
                     "status/build-coverage-flat.svg");
         } catch (MalformedURLException e1) {
             // TODO Auto-generated catch block
@@ -110,7 +110,7 @@ public class ImageResolver {
         }
 
         String replacedImage = replaceCodeCoverageSVG(sb.toString(), codeCoverage);
-        InputStream is = IOUtils.toInputStream(replacedImage);
+        InputStream is = toInputStream(replacedImage);
         String etag = "status/build-coverage-flat.svg" + codeCoverage;
 
         try {
@@ -159,7 +159,7 @@ public class ImageResolver {
         URL image = null;
         try {
             image = new URL(
-                    Jenkins.getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
+                    getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
                     "status/build-test-result-flat.svg");
         } catch (MalformedURLException e1) {
             // TODO Auto-generated catch block
@@ -175,7 +175,7 @@ public class ImageResolver {
         }
 
         String replacedImage = replaceTestResultSVG(sb.toString(), testPass, testTotal);
-        InputStream is = IOUtils.toInputStream(replacedImage);
+        InputStream is = toInputStream(replacedImage);
         String etag = "status/build-test-result-flat.svg" + testPass + testTotal;
 
         try {

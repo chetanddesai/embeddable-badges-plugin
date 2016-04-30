@@ -1,16 +1,17 @@
 package org.jenkinsci.plugins.badge;
 
-import jenkins.model.Jenkins;
-import org.kohsuke.stapler.HttpResponse;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
-
-import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-
+import javax.servlet.ServletException;
 import static javax.servlet.http.HttpServletResponse.*;
+import static jenkins.model.Jenkins.RESOURCE_PATH;
+import static jenkins.model.Jenkins.getInstance;
+import static org.apache.commons.io.IOUtils.closeQuietly;
+import static org.apache.commons.io.IOUtils.toByteArray;
+import org.kohsuke.stapler.HttpResponse;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 
 /**
  * Status image as an {@link HttpResponse}, with proper cache handling.
@@ -53,17 +54,17 @@ class StatusImage implements HttpResponse {
      * @throws IOException
      */
     StatusImage(String fileName) throws IOException {
-        etag = '"' + Jenkins.RESOURCE_PATH + '/' + fileName + '"';
+        etag = '"' + RESOURCE_PATH + '/' + fileName + '"';
 
         URL image;
         image = new URL(
-                Jenkins.getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
+                getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
                 "status/" + fileName);
         InputStream s = image.openStream();
         try {
-            payload = org.apache.commons.io.IOUtils.toByteArray(s);
+            payload = toByteArray(s);
         } finally {
-            org.apache.commons.io.IOUtils.closeQuietly(s);
+            closeQuietly(s);
         }
         length = Integer.toString(payload.length);
     }
@@ -77,9 +78,9 @@ class StatusImage implements HttpResponse {
     StatusImage(String etag, InputStream s) throws IOException {
         this.etag = etag;
         try {
-            payload = org.apache.commons.io.IOUtils.toByteArray(s);
+            payload = toByteArray(s);
         } finally {
-            org.apache.commons.io.IOUtils.closeQuietly(s);
+            closeQuietly(s);
         }
         length = Integer.toString(payload.length);
     }

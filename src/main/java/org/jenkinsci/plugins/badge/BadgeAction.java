@@ -2,8 +2,8 @@ package org.jenkinsci.plugins.badge;
 
 import hudson.model.Action;
 import hudson.model.Job;
-import jenkins.model.Jenkins;
-
+import static jenkins.model.Jenkins.RESOURCE_PATH;
+import static org.jenkinsci.plugins.badge.Messages.BadgeAction_DisplayName;
 import org.kohsuke.stapler.HttpResponse;
 
 /**
@@ -39,7 +39,7 @@ public class BadgeAction implements Action {
      */
     @Override
     public String getIconFileName() {
-        return Jenkins.RESOURCE_PATH + "/plugin/embeddable-badges/images/24x24/shield.png";
+        return RESOURCE_PATH + "/plugin/embeddable-badges/images/24x24/shield.png";
     }
 
     /**
@@ -49,7 +49,7 @@ public class BadgeAction implements Action {
      */
     @Override
     public String getDisplayName() {
-        return Messages.BadgeAction_DisplayName();
+        return BadgeAction_DisplayName();
     }
 
     /**

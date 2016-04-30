@@ -25,25 +25,25 @@ package org.jenkinsci.plugins.badge;
 
 import hudson.Extension;
 import hudson.PluginWrapper;
-import hudson.model.Item;
+import static hudson.model.Item.PERMISSIONS;
+import static hudson.model.Item.READ;
 import hudson.model.Job;
 import hudson.model.UnprotectedRootAction;
-import hudson.security.ACL;
-import hudson.security.Permission;
-import hudson.security.PermissionScope;
-import hudson.tasks.test.AbstractTestResultAction;
-import hudson.util.HttpResponses;
 import hudson.plugins.clover.CloverBuildAction;
 import hudson.plugins.cobertura.CoberturaBuildAction;
 import hudson.plugins.jacoco.JacocoBuildAction;
-
+import static hudson.security.ACL.SYSTEM;
+import static hudson.security.ACL.impersonate;
+import hudson.security.Permission;
+import static hudson.security.PermissionScope.ITEM;
+import hudson.tasks.test.AbstractTestResultAction;
 import java.io.IOException;
-
-import jenkins.model.Jenkins;
-
+import static jenkins.model.Jenkins.getInstance;
 import org.acegisecurity.context.SecurityContext;
-import org.acegisecurity.context.SecurityContextHolder;
+import static org.acegisecurity.context.SecurityContextHolder.setContext;
+import static org.jenkinsci.plugins.badge.Messages._ViewStatus_Permission;
 import org.kohsuke.stapler.HttpResponse;
+import static org.kohsuke.stapler.HttpResponses.notFound;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -73,7 +73,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     /**
      * TO DO
      */
-    public final static Permission VIEW_STATUS = new Permission(Item.PERMISSIONS, "ViewStatus", Messages._ViewStatus_Permission(), Item.READ, PermissionScope.ITEM);
+    public final static Permission VIEW_STATUS = new Permission(PERMISSIONS, "ViewStatus", _ViewStatus_Permission(), READ, ITEM);
     /**
      * TO DO
      */
@@ -127,7 +127,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         Integer codeCoverage = null;
 
         if (project.getLastSuccessfulBuild() != null) {
-            PluginWrapper jacocoInstalled = Jenkins.getInstance().pluginManager.getPlugin("jacoco");
+            PluginWrapper jacocoInstalled = getInstance().pluginManager.getPlugin("jacoco");
             // Checks for Jacoco
             if (jacocoInstalled != null && jacocoInstalled.isActive()) {
                 JacocoBuildAction jacocoAction = project.getLastSuccessfulBuild().getAction(JacocoBuildAction.class);
@@ -137,7 +137,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
                     }
                 }
             }
-            PluginWrapper coberturaInstalled = Jenkins.getInstance().pluginManager.getPlugin("cobertura");
+            PluginWrapper coberturaInstalled = getInstance().pluginManager.getPlugin("cobertura");
             // Checks for Cobertura
             if (coberturaInstalled != null && coberturaInstalled.isActive()) {
                 CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
@@ -147,7 +147,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
                     }
                 }
             }
-           PluginWrapper cloverInstalled = Jenkins.getInstance().pluginManager.getPlugin("clover");
+           PluginWrapper cloverInstalled = getInstance().pluginManager.getPlugin("clover");
             // Checks for Clover
                 if (cloverInstalled != null && cloverInstalled.isActive()) {
                     CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
@@ -181,8 +181,8 @@ public class PublicBadgeAction implements UnprotectedRootAction {
 				int total = testAction.getTotalCount();
 				int pass = total - testAction.getFailCount();
 				
-				testTotal = new Integer(total);
-				testPass = new Integer(pass);
+				testTotal = total;
+				testPass = pass;
 			}
         }
         return iconResolver.getTestResultImage(testPass, testTotal);
@@ -211,16 +211,16 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         // as the user might have ViewStatus permission only (e.g. as anonymous)
         // we get get the project impersonate and 
         // check for permission after getting the project
-        SecurityContext orig = ACL.impersonate(ACL.SYSTEM);
+        SecurityContext orig = impersonate(SYSTEM);
         try {
-            p = Jenkins.getInstance().getItemByFullName(job, Job.class);
+            p = getInstance().getItemByFullName(job, Job.class);
         } finally {
-            SecurityContextHolder.setContext(orig);
+            setContext(orig);
         }
 
         // check if user has permission to view the status
         if (p == null || !(p.hasPermission(VIEW_STATUS))) {
-            throw HttpResponses.notFound();
+            throw notFound();
         }
 
         return p;

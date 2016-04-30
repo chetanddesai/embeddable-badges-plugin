@@ -36,8 +36,8 @@
         </plugin> 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5</version>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.3</version>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
@@ -74,6 +74,7 @@
 		<groupId>org.jenkins-ci.plugins</groupId>
 		<artifactId>junit</artifactId>
 		<version>1.10</version>
+        <optional>true</optional>       
 	</dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
