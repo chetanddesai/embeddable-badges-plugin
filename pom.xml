@@ -3,11 +3,11 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>1.580.1</version>
+        <version>1.625.3</version>
     </parent>
 
     <artifactId>embeddable-badges</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>hpi</packaging>
     <url>https://github.com/SxMShaDoW/embeddable-badges-plugin.git</url>
 
