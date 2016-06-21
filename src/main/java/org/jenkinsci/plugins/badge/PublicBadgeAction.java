@@ -31,6 +31,7 @@ import hudson.model.Job;
 import hudson.model.UnprotectedRootAction;
 import hudson.plugins.clover.CloverBuildAction;
 import hudson.plugins.cobertura.CoberturaBuildAction;
+import hudson.plugins.cobertura.targets.CoverageMetric;
 import hudson.plugins.jacoco.JacocoBuildAction;
 import static hudson.security.ACL.SYSTEM;
 import static hudson.security.ACL.impersonate;
@@ -143,7 +144,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
                 CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
                 if (coverageAction != null) {
                     if (coverageAction.getBuildHealth() != null){
-                        codeCoverage = coverageAction.getBuildHealth().getScore();
+                        codeCoverage = coverageAction.getResults().get(CoverageMetric.LINE).getPercentage();
                     }
                 }
             }
@@ -153,7 +154,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
                     CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
                     if (cloverAction != null){
                         if (cloverAction.getBuildHealth() != null){
-                            codeCoverage = cloverAction.getBuildHealth().getScore();
+                            codeCoverage = cloverAction.getStatementCoverage().getPercentage();
                         }
                     }
                 }
