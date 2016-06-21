@@ -10,7 +10,7 @@ Inspired and based off of the the [Embeddable-Build-Status-Plugin](https://wiki.
 
 1. Build Status
 2. Code Coverage for Cobertura and Clover
-3. JUnit Test Report
+3. JUnit or TestNG Test Report
 
 # License
 
