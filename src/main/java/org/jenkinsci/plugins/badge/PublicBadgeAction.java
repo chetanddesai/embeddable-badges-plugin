@@ -154,7 +154,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
                     CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
                     if (cloverAction != null){
                         if (cloverAction.getBuildHealth() != null){
-                            codeCoverage = cloverAction.getStatementCoverage().getPercentage();
+                            codeCoverage = cloverAction.getElementCoverage().getPercentage();
                         }
                     }
                 }
