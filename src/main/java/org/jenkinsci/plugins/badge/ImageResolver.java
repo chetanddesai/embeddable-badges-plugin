@@ -132,7 +132,7 @@ public class ImageResolver {
 
         if (codeCoverage == null) {
             String modifiedColor = image.replace("{hex-color-to-change}", GREY);
-            return modifiedColor.replace("{code-coverage-to-change}", "n/a");
+            return modifiedColor.replace("{code-coverage-to-change}", "0");
 
         } else if (codeCoverage < 20) {
             String modifiedColor = image.replace("{hex-color-to-change}", RED);

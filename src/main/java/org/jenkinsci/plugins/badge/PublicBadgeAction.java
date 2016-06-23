@@ -180,7 +180,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         	AbstractTestResultAction testAction =  project.getLastSuccessfulBuild().getAction(AbstractTestResultAction.class);
 			if(testAction != null){
 				int total = testAction.getTotalCount();
-				int pass = total - testAction.getFailCount();
+				int pass = total - testAction.getFailCount() - testAction.getSkipCount();
 				
 				testTotal = total;
 				testPass = pass;
