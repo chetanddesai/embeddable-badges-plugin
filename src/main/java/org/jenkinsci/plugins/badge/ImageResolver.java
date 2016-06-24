@@ -61,6 +61,10 @@ public class ImageResolver {
      * TO DO
      */
     public static final String GREY = "#808080";
+    /**
+     * TO DO
+     */
+    public static final String BLUE = "#007ec6";
 
     /**
      * TO DO
@@ -258,7 +262,7 @@ public class ImageResolver {
             return modifiedColor.replace("{description_text}", "n/a");
         }
         else {
-            String modifiedColor = image.replace("{hex-color-to-change}", GREEN);
+            String modifiedColor = image.replace("{hex-color-to-change}", BLUE);
             String modifiedPass = modifiedColor.replace("{description_text}", buildDescription);
             return modifiedPass;
 	        }
