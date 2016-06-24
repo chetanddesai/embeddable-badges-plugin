@@ -23,6 +23,9 @@ Reports a coverage percentage for the following technologies:
 ### Unit Tests
 Number of JUnit or TestNG tests executed successfully.
 
+### Description
+With the [build description setter](https://wiki.jenkins-ci.org/display/JENKINS/Description+Setter+Plugin) plugin, folks often create regex's to post the version of the module that was created as a build description.  This badge will display whatever that description is.
+
 # License
 
 [MIT](LICENSE)

@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.4
+[chetanddesai](https://github.com/chetanddesai)
+
+* Fix division cast issue on [#35](https://github.com/SxMShaDoW/embeddable-badges-plugin/issues/35).
+* Add in a new build description badge [#34](https://github.com/SxMShaDoW/embeddable-badges-plugin/issues/34).
+
 ## 2.3
 [chetanddesai](https://github.com/chetanddesai)
 
