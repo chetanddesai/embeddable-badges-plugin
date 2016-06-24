@@ -180,7 +180,7 @@ public class ImageResolver {
 
         String replacedImage = replaceTestResultSVG(sb.toString(), testPass, testTotal);
         InputStream is = toInputStream(replacedImage);
-        String etag = "status/build-test-result-flat.svg" + testPass + testTotal + YELLOW;
+        String etag = "status/build-test-result-flat.svg" + testPass + testTotal;
 
         try {
             return new StatusImage(etag, is);
