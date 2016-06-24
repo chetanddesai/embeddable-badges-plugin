@@ -61,6 +61,10 @@ public class ImageResolver {
      * TO DO
      */
     public static final String GREY = "#808080";
+    /**
+     * TO DO
+     */
+    public static final String BLUE = "#007ec6";
 
     /**
      * TO DO
@@ -201,7 +205,9 @@ public class ImageResolver {
             return modifiedColor.replace("{passed-tests}/{total-tests}", "n/a");
         } 
         else {
-        	float passPercent = (float) (testPass / testTotal) * 100;
+                double passTest = (double) (testPass);
+                double passTotal = (double) (testTotal);
+        	double passPercent = (passTest / passTotal) * 100.0;
         	if (passPercent < 20) {
 	            String modifiedColor = image.replace("{hex-color-to-change}", RED);
 	            String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
@@ -244,5 +250,58 @@ public class ImageResolver {
 
         }
     }
+    /**
+     * TO DO
+     * @param image
+     * @param testPass
+     * @param testTotal
+     * @return
+     */
+    private String replaceBuildDescriptionSVG(String image, String buildDescription) {
 
+        if (buildDescription == null) {
+            String modifiedColor = image.replace("{hex-color-to-change}", GREY);
+            return modifiedColor.replace("{description_text}", "n/a");
+        }
+        else {
+            String modifiedColor = image.replace("{hex-color-to-change}", BLUE);
+            String modifiedPass = modifiedColor.replace("{description_text}", buildDescription);
+            return modifiedPass;
+	        }
+        }
+    
+    
+    public StatusImage getBuildDescriptionImage(String buildDescription) {
+         // TODO don't read file everytime
+        // TODO store this as a static variable in memory with the constructor
+        URL image = null;
+        try {
+            image = new URL(
+                    getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
+                    "status/build-description-flat.svg");
+        } catch (MalformedURLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        StringBuilder sb = null;
+        try {
+            sb = new StringBuilder(IOUtils.toString(image.openStream()));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        String replacedImage = replaceBuildDescriptionSVG(sb.toString(), buildDescription);
+        InputStream is = toInputStream(replacedImage);
+        String etag = "status/build-description-flat.svg" + buildDescription;
+
+        try {
+            return new StatusImage(etag, is);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

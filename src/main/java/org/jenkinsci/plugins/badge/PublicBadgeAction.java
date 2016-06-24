@@ -201,6 +201,23 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         return iconResolver.getImage(project.getIconColor());
 
     }
+    
+        /**
+     * Serves the Build Description badge image.
+     * @param req
+     * @param rsp
+     * @param job
+     * @return
+     */
+    public HttpResponse doBuildDescriptionIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
+        Job<?, ?> project = getProject(job);
+        String buildDescription = null;
+        if (project.getLastSuccessfulBuild() != null) {
+            buildDescription = project.getLastSuccessfulBuild().getDescription();
+        }
+        return iconResolver.getBuildDescriptionImage(buildDescription);
+
+    }
     /** 
      * TO DO
      * @param job
