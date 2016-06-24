@@ -35,7 +35,7 @@ l.layout {
         def buildStatus = "${app.rootUrl}buildStatus/buildIcon?job=${fullJobName}";
         def coverage = "${app.rootUrl}buildStatus/coverageIcon?job=${fullJobName}";
         def test = "${app.rootUrl}buildStatus/testIcon?job=${fullJobName}";
-        def description = "${app.rootUrl}buildStatus/descriptionIcon?job=${fullJobName}";
+        def description = "${app.rootUrl}buildStatus/buildDescriptionIcon?job=${fullJobName}";
 
 		h2(_("Build Status"))
 		h3 {
