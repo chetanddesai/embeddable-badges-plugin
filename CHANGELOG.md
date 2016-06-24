@@ -1,5 +1,10 @@
 # Change Log
 
+## 2.3
+[chetanddesai](https://github.com/chetanddesai)
+
+* Fix the colour bug on the test icon. See issue [#35](https://github.com/SxMShaDoW/embeddable-badges-plugin/issues/35).
+
 ## 2.2
 [chetanddesai](https://github.com/chetanddesai)
 
