@@ -35,6 +35,7 @@ l.layout {
         def buildStatus = "${app.rootUrl}buildStatus/buildIcon?job=${fullJobName}";
         def coverage = "${app.rootUrl}buildStatus/coverageIcon?job=${fullJobName}";
         def test = "${app.rootUrl}buildStatus/testIcon?job=${fullJobName}";
+        def description = "${app.rootUrl}buildStatus/buildDescriptionIcon?job=${fullJobName}";
 
 		h2(_("Build Status"))
 		h3 {
@@ -77,5 +78,19 @@ l.layout {
 
         h3(_("Confluence"))
         input(type:"text",value:"[!${test}!|${jobUrlWithoutView}]",class:"select-all")
-    }
+        
+        h2(_("Description"))
+		h3 {
+            img(id:"description",src:description)
+        }
+
+		h3(_("Direct URL"))
+		input(type:"description",value:description,class:"select-all")
+
+        h3(_("Markdown"))
+        input(type:"text",value:"[![description](${description})](${jobUrlWithoutView})",class:"select-all")
+
+        h3(_("Confluence"))
+        input(type:"text",value:"[!${description}!|${jobUrlWithoutView}]",class:"select-all")
+}
 }
