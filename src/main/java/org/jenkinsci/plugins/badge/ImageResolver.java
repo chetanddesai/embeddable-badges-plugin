@@ -198,10 +198,10 @@ public class ImageResolver {
 
         if (testTotal == null || testPass == null) {
             String modifiedColor = image.replace("{hex-color-to-change}", GREY);
-            return modifiedColor.replace("{passed-tests} / {total-tests}", "n/a");
+            return modifiedColor.replace("{passed-tests}/{total-tests}", "n/a");
         } 
         else {
-        	int passPercent = (testPass / testTotal) * 100;
+        	float passPercent = (float) (testPass / testTotal) * 100;
         	if (passPercent < 20) {
 	            String modifiedColor = image.replace("{hex-color-to-change}", RED);
 	            String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
