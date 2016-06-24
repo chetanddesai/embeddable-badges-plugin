@@ -102,4 +102,3 @@ l.layout {
         h3(_("Confluence"))
         input(type:"text",value:"[!${Description}!|${jobUrlWithoutView}]",class:"select-all")
     }
-}
