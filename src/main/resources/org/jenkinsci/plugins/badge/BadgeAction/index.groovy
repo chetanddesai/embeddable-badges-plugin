@@ -78,15 +78,6 @@ l.layout {
 
         h3(_("Confluence"))
         input(type:"text",value:"[!${test}!|${jobUrlWithoutView}]",class:"select-all")
-    }
-		h3(_("Direct URL"))
-		input(type:"text",value:coverage,class:"select-all")
-
-        h3(_("Markdown"))
-        input(type:"text",value:"[![Code Coverage](${coverage})](${jobUrlWithoutView})",class:"select-all")
-
-        h3(_("Confluence"))
-        input(type:"text",value:"[!${coverage}!|${jobUrlWithoutView}]",class:"select-all")
         
         h2(_("Description"))
 		h3 {
@@ -97,8 +88,9 @@ l.layout {
 		input(type:"description",value:description,class:"select-all")
 
         h3(_("Markdown"))
-        input(type:"text",value:"[![Description](${description})](${jobUrlWithoutView})",class:"select-all")
+        input(type:"text",value:"[![description](${description})](${jobUrlWithoutView})",class:"select-all")
 
         h3(_("Confluence"))
-        input(type:"text",value:"[!${Description}!|${jobUrlWithoutView}]",class:"select-all")
-    }
+        input(type:"text",value:"[!${description}!|${jobUrlWithoutView}]",class:"select-all")
+}
+}

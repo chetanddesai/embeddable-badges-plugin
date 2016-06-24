@@ -180,7 +180,7 @@ public class ImageResolver {
 
         String replacedImage = replaceTestResultSVG(sb.toString(), testPass, testTotal);
         InputStream is = toInputStream(replacedImage);
-        String etag = "status/build-test-result-flat.svg" + testPass + testTotal;
+        String etag = "status/build-test-result-flat.svg" + testPass + testTotal + YELLOW;
 
         try {
             return new StatusImage(etag, is);
@@ -205,7 +205,9 @@ public class ImageResolver {
             return modifiedColor.replace("{passed-tests}/{total-tests}", "n/a");
         } 
         else {
-        	float passPercent = (float) (testPass / testTotal) * 100;
+                double passTest = (double) (testPass);
+                double passTotal = (double) (testTotal);
+        	double passPercent = (passTest / passTotal) * 100.0;
         	if (passPercent < 20) {
 	            String modifiedColor = image.replace("{hex-color-to-change}", RED);
 	            String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
