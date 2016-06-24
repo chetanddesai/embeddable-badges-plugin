@@ -7,14 +7,15 @@
         <rect width="276" height="20" rx="3" fill="#fff"/>
     </mask>
     <g mask="url(#a)">
-        <path fill="#555" d="M0 0h31v20H0z"/>
-        <path fill="{hex-color-to-change}" d="M31 0h245v20H31z"/>
+        <path fill="#555" d="M0 0h70v20H0z"/>
+        <path fill="{hex-color-to-change}" d="M70 0h245v20H70z"/>
         <path fill="url(#b)" d="M0 0h276v20H0z"/>
     </g>
     <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
-        <text x="15.5" y="15" fill="#010101" fill-opacity=".3">desc</text>
-        <text x="15.5" y="14">desc</text>
-        <text x="152.5" y="15" fill="#010101" fill-opacity=".3">igor_mukhin.sublimetext3_packagecontrol</text>
-        <text x="152.5" y="14">igor_mukhin.sublimetext3_packagecontrol</text>
+        <text x="35" y="15" fill="#010101" fill-opacity=".3">description</text>
+        <text x="35" y="14">description</text>
+        <text x="170" y="15" fill="#010101" fill-opacity=".3">{description_text}</text>
+        <text x="170" y="14">{description_text}</text>
     </g>
 </svg>
+

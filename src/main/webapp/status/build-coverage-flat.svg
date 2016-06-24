@@ -14,7 +14,7 @@
     <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
         <text x="30.5" y="15" fill="#010101" fill-opacity=".3">coverage</text>
         <text x="30.5" y="14">coverage</text>
-        <text x="77.5" y="15" fill="#010101" fill-opacity=".3">{description_text}</text>
-        <text x="77.5" y="14">{description_text}</text>
+        <text x="77.5" y="15" fill="#010101" fill-opacity=".3">{code-coverage-to-change}%</text>
+        <text x="77.5" y="14">{code-coverage-to-change}%</text>
     </g>
 </svg>
