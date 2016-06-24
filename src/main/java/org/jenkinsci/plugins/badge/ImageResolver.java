@@ -32,7 +32,6 @@ import java.util.HashMap;
 import static jenkins.model.Jenkins.getInstance;
 import org.apache.commons.io.IOUtils;
 import static org.apache.commons.io.IOUtils.toInputStream;
-import org.kohsuke.stapler.HttpResponse;
 /**
  * TO DO
  * @author dkersch
@@ -199,7 +198,7 @@ public class ImageResolver {
 
         if (testTotal == null || testPass == null) {
             String modifiedColor = image.replace("{hex-color-to-change}", GREY);
-            return modifiedColor.replace("{passed-tests} / {total-tests}", "0");
+            return modifiedColor.replace("{passed-tests}/{total-tests}", "n/a");
         } 
         else {
         	int passPercent = (testPass / testTotal) * 100;
