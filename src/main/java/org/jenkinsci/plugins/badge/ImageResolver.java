@@ -202,7 +202,13 @@ public class ImageResolver {
 
         int defaultTextLength = 52;
         int defaultBadgeLength = 70;
-        int passTotalLength = testTotal.toString().length();
+        int passTotalLength;
+        if (testTotal == null){
+            passTotalLength = 1;
+        }
+        else {
+            passTotalLength = testTotal.toString().length();
+        }
         if (passTotalLength > 1){
             defaultTextLength = defaultTextLength + (6 * passTotalLength);
             defaultBadgeLength = defaultBadgeLength + (12 * passTotalLength);
