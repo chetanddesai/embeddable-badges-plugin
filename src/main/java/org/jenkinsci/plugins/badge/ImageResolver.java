@@ -200,9 +200,9 @@ public class ImageResolver {
      */
     private String replaceTestResultSVG(String image, Integer testPass, Integer testTotal) {
 
-        double defaultTextLength = 52;
-        double defaultBadgeLength = 70;
-        double passTotalLength = testTotal.toString().length();
+        int defaultTextLength = 52;
+        int defaultBadgeLength = 70;
+        int passTotalLength = testTotal.toString().length();
         if (passTotalLength > 1){
             defaultTextLength = defaultTextLength + (6 * passTotalLength);
             defaultBadgeLength = defaultBadgeLength + (12 * passTotalLength);
