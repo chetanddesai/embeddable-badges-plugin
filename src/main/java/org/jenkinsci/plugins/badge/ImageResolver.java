@@ -280,8 +280,6 @@ public class ImageResolver {
 	        }
         }
     
-    
-    
     public StatusImage getBuildDescriptionImage(String buildDescription) {
          // TODO don't read file everytime
         // TODO store this as a static variable in memory with the constructor
