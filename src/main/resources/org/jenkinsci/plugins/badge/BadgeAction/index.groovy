@@ -79,7 +79,7 @@ l.layout {
         h3(_("Confluence"))
         input(type:"text",value:"[!${test}!|${jobUrlWithoutView}]",class:"select-all")
         
-        h2(_("Description"))
+        h2(_("Build Description"))
 		h3 {
             img(id:"description",src:description)
         }

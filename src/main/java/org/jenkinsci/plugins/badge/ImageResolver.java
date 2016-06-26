@@ -200,8 +200,24 @@ public class ImageResolver {
      */
     private String replaceTestResultSVG(String image, Integer testPass, Integer testTotal) {
 
+        int defaultTextLength = 52;
+        int defaultBadgeLength = 70;
+        int passTotalLength;
+        if (testTotal == null){
+            passTotalLength = 1;
+        }
+        else {
+            passTotalLength = testTotal.toString().length();
+        }
+        if (passTotalLength > 1){
+            defaultTextLength = defaultTextLength + (6 * passTotalLength);
+            defaultBadgeLength = defaultBadgeLength + (12 * passTotalLength);
+        }
+        String modifiedTextLength = image.replace("{change-text-length}", String.valueOf(defaultTextLength));
+        String modifiedBadgeLength = modifiedTextLength.replace("{change-badge-length}", String.valueOf(defaultBadgeLength));
+        
         if (testTotal == null || testPass == null) {
-            String modifiedColor = image.replace("{hex-color-to-change}", GREY);
+            String modifiedColor = modifiedBadgeLength.replace("{hex-color-to-change}", GREY);
             return modifiedColor.replace("{passed-tests}/{total-tests}", "n/a");
         } 
         else {
@@ -209,18 +225,19 @@ public class ImageResolver {
                 double passTotal = (double) (testTotal);
         	double passPercent = (passTest / passTotal) * 100.0;
         	if (passPercent < 20) {
-	            String modifiedColor = image.replace("{hex-color-to-change}", RED);
+	            String modifiedColor = modifiedBadgeLength.replace("{hex-color-to-change}", RED);
 	            String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
 	            return modifiedPass.replace("{total-tests}", testTotal.toString());
 	        } else if (passPercent < 80) {
-	            String modifiedColor = image.replace("{hex-color-to-change}", YELLOW);
+	            String modifiedColor = modifiedBadgeLength.replace("{hex-color-to-change}", YELLOW);
 	            String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
 	            return modifiedPass.replace("{total-tests}", testTotal.toString());
 	        } else {
-	            String modifiedColor = image.replace("{hex-color-to-change}", GREEN);
+	            String modifiedColor = modifiedBadgeLength.replace("{hex-color-to-change}", GREEN);
 	            String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
 	            return modifiedPass.replace("{total-tests}", testTotal.toString());
 	        }
+                
         }
 
     }
@@ -258,7 +275,6 @@ public class ImageResolver {
      * @return
      */
     private String replaceBuildDescriptionSVG(String image, String buildDescription) {
-
         if (buildDescription == null) {
             String modifiedColor = image.replace("{hex-color-to-change}", GREY);
             return modifiedColor.replace("{description_text}", "n/a");
@@ -269,7 +285,6 @@ public class ImageResolver {
             return modifiedPass;
 	        }
         }
-    
     
     public StatusImage getBuildDescriptionImage(String buildDescription) {
          // TODO don't read file everytime
@@ -283,7 +298,6 @@ public class ImageResolver {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-
         StringBuilder sb = null;
         try {
             sb = new StringBuilder(IOUtils.toString(image.openStream()));
