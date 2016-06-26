@@ -275,12 +275,28 @@ public class ImageResolver {
      * @return
      */
     private String replaceBuildDescriptionSVG(String image, String buildDescription) {
+        int defaultTextLength = 82;
+        int defaultBadgeLength = 95;
+        int descriptionLength;
+        if (buildDescription == null){
+            descriptionLength = 1;
+        }
+        else {
+            descriptionLength = buildDescription.length();
+        }
+        if (descriptionLength > 1){
+            defaultTextLength = defaultTextLength + (3 * descriptionLength);
+            defaultBadgeLength = defaultBadgeLength + (6 * descriptionLength);
+        }
+        String modifiedTextLength = image.replace("{change-text-length}", String.valueOf(defaultTextLength));
+        String modifiedBadgeLength = modifiedTextLength.replace("{change-badge-length}", String.valueOf(defaultBadgeLength));
+        
         if (buildDescription == null) {
-            String modifiedColor = image.replace("{hex-color-to-change}", GREY);
+            String modifiedColor = modifiedBadgeLength.replace("{hex-color-to-change}", GREY);
             return modifiedColor.replace("{description_text}", "n/a");
         }
         else {
-            String modifiedColor = image.replace("{hex-color-to-change}", BLUE);
+            String modifiedColor = modifiedBadgeLength.replace("{hex-color-to-change}", BLUE);
             String modifiedPass = modifiedColor.replace("{description_text}", buildDescription);
             return modifiedPass;
 	        }
