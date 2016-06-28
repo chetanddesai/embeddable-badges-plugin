@@ -1,5 +1,10 @@
 # Change Log
 
+## 2.5
+[chetanddesai](https://github.com/chetanddesai)
+
+* First pass on dynamically scaling images [#40](https://github.com/SxMShaDoW/embeddable-badges-plugin/issues/40).
+
 ## 2.4
 [chetanddesai](https://github.com/chetanddesai)
 
