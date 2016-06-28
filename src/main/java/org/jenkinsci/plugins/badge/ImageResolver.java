@@ -150,6 +150,33 @@ public class ImageResolver {
         }
 
     }
+    private Integer[] scaleBadge(Integer totalLength, String badgeType){
+        //52 (x6), 70 (x12) and 82 (x3), 95 (x6)
+        int defaultTextLength = 52; //default for test status
+        int defaultBadgeLength = 70; //default for test status
+        int defaultMulitplier = 6;
+        int totalTextLength;
+        Integer[] svgLengths = new Integer[2];
+        if (totalLength == null){
+            totalTextLength = 1; //"n/a"
+        } else {
+            totalTextLength = totalLength.toString().length();
+        }
+        if ("description".equals(badgeType)) {
+            defaultTextLength = 82;
+            defaultBadgeLength = 95;
+            defaultMulitplier = 3;
+    }
+        if (totalTextLength > 1) {
+            defaultTextLength = defaultTextLength + (defaultMulitplier * totalTextLength);
+            defaultBadgeLength = defaultBadgeLength + ((defaultMulitplier * 2) * totalTextLength);
+        }
+        svgLengths[0] = defaultTextLength;
+        svgLengths[1] = defaultBadgeLength;
+        return svgLengths;
+    }
+    
+    
     /**
      * TO DO
      * @param testPass
@@ -199,20 +226,12 @@ public class ImageResolver {
      * @return
      */
     private String replaceTestResultSVG(String image, Integer testPass, Integer testTotal) {
-
-        int defaultTextLength = 52;
-        int defaultBadgeLength = 70;
-        int passTotalLength;
-        if (testTotal == null){
-            passTotalLength = 1;
-        }
-        else {
-            passTotalLength = testTotal.toString().length();
-        }
-        if (passTotalLength > 1){
-            defaultTextLength = defaultTextLength + (6 * passTotalLength);
-            defaultBadgeLength = defaultBadgeLength + (12 * passTotalLength);
-        }
+        int totalLength;
+        String badgeType;
+        badgeType = "tests";
+        totalLength = testPass.toString().length() + testTotal.toString().length() + 1; //include the "/" in the badge
+        Integer defaultTextLength = scaleBadge(totalLength, badgeType)[0];
+        Integer defaultBadgeLength = scaleBadge(totalLength, badgeType)[1];
         String modifiedTextLength = image.replace("{change-text-length}", String.valueOf(defaultTextLength));
         String modifiedBadgeLength = modifiedTextLength.replace("{change-badge-length}", String.valueOf(defaultBadgeLength));
         
@@ -275,19 +294,12 @@ public class ImageResolver {
      * @return
      */
     private String replaceBuildDescriptionSVG(String image, String buildDescription) {
-        int defaultTextLength = 82;
-        int defaultBadgeLength = 95;
-        int descriptionLength;
-        if (buildDescription == null){
-            descriptionLength = 1;
-        }
-        else {
-            descriptionLength = buildDescription.length();
-        }
-        if (descriptionLength > 1){
-            defaultTextLength = defaultTextLength + (3 * descriptionLength);
-            defaultBadgeLength = defaultBadgeLength + (6 * descriptionLength);
-        }
+        int totalLength;
+        String badgeType;
+        badgeType = "description";
+        totalLength = buildDescription.length();
+        Integer defaultTextLength = scaleBadge(totalLength, badgeType)[0];
+        Integer defaultBadgeLength = scaleBadge(totalLength, badgeType)[1];
         String modifiedTextLength = image.replace("{change-text-length}", String.valueOf(defaultTextLength));
         String modifiedBadgeLength = modifiedTextLength.replace("{change-badge-length}", String.valueOf(defaultBadgeLength));
         
