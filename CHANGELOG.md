@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.5.1
+[chetanddesai](https://github.com/chetanddesai)
+
+* Fix broken Jenkins job URLs on Enterprise Jenkins [#45](https://github.com/SxMShaDoW/embeddable-badges-plugin/issues/45).
+
+
 ## 2.5
 [chetanddesai](https://github.com/chetanddesai)
 
