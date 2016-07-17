@@ -31,7 +31,7 @@ l.layout {
 """)
 
         def fullJobName = h.escape(my.project.fullName);
-        def jobUrlWithoutView =  "${app.rootUrl}job/${fullJobName}";
+        def jobUrlWithoutView =  "${app.rootUrl}${app.getItemByFullName(fullJobName).getUrl()}";
         def buildStatus = "${app.rootUrl}buildStatus/buildIcon?job=${fullJobName}";
         def coverage = "${app.rootUrl}buildStatus/coverageIcon?job=${fullJobName}";
         def test = "${app.rootUrl}buildStatus/testIcon?job=${fullJobName}";
