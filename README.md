@@ -8,6 +8,17 @@ Inspired and based off of the the [Embeddable-Build-Status-Plugin](https://wiki.
 
 See our [CHANGELOG](CHANGELOG.md) for a history of available versions and changes.
 
+# Manual Installation
+
+This plugin is not yet available for installation via Jenkins Plugin Manager (Manage Jenkins -> Manage Plugins), and requires manual installation.  The following steps are how to install it manually.
+
+1. Sync the latest code line, or from one of our git tags.
+2. Run `mvn clean package` locally, this generates a `target/embeddable-badges.hpi` file that you can manually install.
+3. On the `Advanced` tab of the Jenkins plugin manager (`http://<your jenkins host>/pluginManager/advanced`), browse to the generated `target/embeddable-badges.hpi` file under the `Upload Plugin` section.
+4. Click Upload.
+5. Restart Jenkins.
+6. Profit.
+
 # Badge Types
 
 ### Build Status
