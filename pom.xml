@@ -115,6 +115,10 @@
                         <version>1.2.0</version>
                         <configuration>
                             <withHistory>true</withHistory>
+                            <outputFormats>
+                                <outputFormat>XML</outputFormat>
+                                <outputFormat>HTML</outputFormat>
+                            </outputFormats>
                         </configuration>
                         <executions>
                             <execution>
