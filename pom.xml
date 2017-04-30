@@ -100,4 +100,35 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
+        <profiles>
+                <!-- Full Mutation testing -->
+        <profile>
+            <id>mutate</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>1.2.0</version>
+                        <configuration>
+                            <withHistory>true</withHistory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>pre-mutation-coverage</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>mutationCoverage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <!-- End of Mutation Testing -->
+        </profile>
+    </profiles>
 </project>
