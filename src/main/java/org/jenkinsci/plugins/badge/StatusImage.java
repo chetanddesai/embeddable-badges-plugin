@@ -3,12 +3,13 @@ package org.jenkinsci.plugins.badge;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
 import javax.servlet.ServletException;
-import static javax.servlet.http.HttpServletResponse.*;
 import static jenkins.model.Jenkins.RESOURCE_PATH;
 import static jenkins.model.Jenkins.getInstance;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.apache.commons.io.IOUtils.toByteArray;
+
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -34,7 +35,7 @@ class StatusImage implements HttpResponse {
     /**
      * TO DO
      */
-    private final byte[] payload;
+    public final byte[] payload;
 
     /**
      * To improve the caching, compute unique ETag.
@@ -84,6 +85,7 @@ class StatusImage implements HttpResponse {
         }
         length = Integer.toString(payload.length);
     }
+    
     /**
      * TO DO
      * @param req
@@ -94,11 +96,11 @@ class StatusImage implements HttpResponse {
      */
     @Override
     public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
-        String v = req.getHeader("If-None-Match");
+        /*String v = req.getHeader("If-None-Match");
         if (etag.equals(v)) {
             rsp.setStatus(SC_NOT_MODIFIED);
             return;
-        }
+        }*/
 
         rsp.setHeader("ETag", etag);
         rsp.setHeader("Expires", "Fri, 01 Jan 1984 00:00:00 GMT");

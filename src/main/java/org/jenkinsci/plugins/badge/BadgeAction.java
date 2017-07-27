@@ -9,6 +9,7 @@ import org.kohsuke.stapler.HttpResponse;
 /**
  * @author Kohsuke Kawaguchi
  */
+@SuppressWarnings("rawtypes")
 public class BadgeAction implements Action {
 
     /**
@@ -19,7 +20,7 @@ public class BadgeAction implements Action {
     /**
      * TO DO
      */
-    public final Job project;
+	public final Job project;
 
     /**
      * TO DO
