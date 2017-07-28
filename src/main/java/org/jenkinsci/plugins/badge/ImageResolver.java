@@ -155,17 +155,17 @@ public class ImageResolver {
     }
     private Integer[] scaleBadge(Integer totalLength, String badgeType){
         //52 (x6), 70 (x12) and 82 (x3), 95 (x6)
-        int defaultTextLength = 40; //default for test status. Old: 52
-        int defaultBadgeLength = 55; //default for test status. Old: 70
-        int defaultMultiplier = 6;
+        int defaultTextLength = 52; //default for test status. Old: 52
+        int defaultBadgeLength = 70; //default for test status. Old: 70
+        int defaultMultiplier = 3;	// Old: 6
         
         if ("description".equals(badgeType)) {
-            defaultTextLength = 70;	// Old: 82
-            defaultBadgeLength = 70;	// Old: 95
-            defaultMultiplier = 3;
+            defaultTextLength = 82;	// Old: 82
+            defaultBadgeLength = 95;	// Old: 95
+            defaultMultiplier = 3;	// Old: 3
         }
         
-        if (totalLength > 0) {
+        if (totalLength > 3) {	// > "n/a"
             defaultTextLength = defaultTextLength + (defaultMultiplier * totalLength);
             defaultBadgeLength = defaultBadgeLength + ((defaultMultiplier * 2) * totalLength);
         }
