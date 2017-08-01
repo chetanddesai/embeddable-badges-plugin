@@ -35,7 +35,7 @@ class StatusImage implements HttpResponse {
     /**
      * TO DO
      */
-    public final byte[] payload;
+    private final byte[] payload;
 
     /**
      * To improve the caching, compute unique ETag.

@@ -25,6 +25,7 @@ package org.jenkinsci.plugins.badge;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import hudson.model.FreeStyleProject;
+import hudson.security.GlobalMatrixAuthorizationStrategy;
 import hudson.security.SecurityRealm;
 import java.io.IOException;
 import static java.lang.System.out;
@@ -102,7 +103,6 @@ public class PublicBadgeActionTest {
      */
     @PresetData(NO_ANONYMOUS_READACCESS)
     @Test
-    @Ignore
     public void authenticatedAccess() throws Exception {
         final FreeStyleProject project = j.createFreeStyleProject("free");
         JenkinsRule.WebClient wc = j.createWebClient();
@@ -124,7 +124,6 @@ public class PublicBadgeActionTest {
      */
     @PresetData(NO_ANONYMOUS_READACCESS)
     @Test
-    @Ignore
     public void invalidAnonymousAccess() throws Exception {
         final FreeStyleProject project = j.createFreeStyleProject("free");
         JenkinsRule.WebClient wc = j.createWebClient();
@@ -153,7 +152,7 @@ public class PublicBadgeActionTest {
      *
      * @throws Exception
      */
-    /*@Test
+    @Test
     public void validAnonymousViewStatusAccess() throws Exception {
 
         final SecurityRealm realm = j.createDummySecurityRealm();
@@ -177,7 +176,7 @@ public class PublicBadgeActionTest {
         wc.goTo("buildStatus/buildIcon?job=free", "image/svg+xml");
         j.buildAndAssertSuccess(project);
    
-    }*/
+    }
     
     /**
      *
@@ -185,7 +184,6 @@ public class PublicBadgeActionTest {
      */
     @PresetData(ANONYMOUS_READONLY)
     @Test
-    @Ignore
     public void validAnonymousAccess() throws Exception {
         final FreeStyleProject project = j.createFreeStyleProject("free");
         JenkinsRule.WebClient wc = j.createWebClient();
