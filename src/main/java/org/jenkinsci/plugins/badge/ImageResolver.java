@@ -67,6 +67,10 @@ public class ImageResolver {
      * TO DO
      */
     public static final String BLUE = "#007ec6";
+    
+    // Include the plugin's current version number in the ETag,...
+	// ...so that cached responses from a previous version don't get served
+    private final String thisPluginCurrentVersion = getClass().getPackage().getImplementationVersion();
 
     
     /**
@@ -95,7 +99,6 @@ public class ImageResolver {
      * @return
      */
     public StatusImage getCoverageImage(Integer codeCoverage) {
-
         // TODO don't read file everytime, store this as a static variable in
         // TODO memory with the constructor
         URL image = null;
@@ -118,7 +121,7 @@ public class ImageResolver {
 
         String replacedImage = replaceCodeCoverageSVG(sb.toString(), codeCoverage);
         InputStream is = toInputStream(replacedImage);
-        String etag = "status/build-coverage-flat.svg" + codeCoverage;
+        String etag = thisPluginCurrentVersion + "-status/build-coverage-flat.svg-" + codeCoverage;
 
         try {
             return new StatusImage(etag, is);
@@ -126,9 +129,10 @@ public class ImageResolver {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
         return null;
-
     }
+    
     /**
      * TO DO
      * @param image
@@ -136,11 +140,10 @@ public class ImageResolver {
      * @return
      */
     private String replaceCodeCoverageSVG(String image, Integer codeCoverage) {
-
         if (codeCoverage == null) {
             String modifiedColor = image.replace("{hex-color-to-change}", GREY);
             //return modifiedColor.replace("{code-coverage-to-change}", "0");
-            return modifiedColor.replace("{code-coverage-to-change}", "n/a");
+            return modifiedColor.replace("{code-coverage-to-change}", "NaN");
 
         } else if (codeCoverage < 20) {
             String modifiedColor = image.replace("{hex-color-to-change}", RED);
@@ -152,8 +155,8 @@ public class ImageResolver {
             String modifiedColor = image.replace("{hex-color-to-change}", GREEN);
             return modifiedColor.replace("{code-coverage-to-change}", codeCoverage.toString());
         }
-
     }
+    
     private Integer[] scaleBadge(Integer totalLength, String badgeType){
         //52 (x6), 70 (x12) and 82 (x3), 95 (x6)
         int defaultTextLength = 52; //default for test status. Old: 52
@@ -185,7 +188,6 @@ public class ImageResolver {
      * @return
      */
     public StatusImage getTestResultImage(Integer testPass, Integer testTotal) {
-
         // TODO don't read file everytime
         // TODO store this as a static variable in memory with the constructor
         URL image = null;
@@ -208,7 +210,7 @@ public class ImageResolver {
 
         String replacedImage = replaceTestResultSVG(sb.toString(), testPass, testTotal);
         InputStream is = toInputStream(replacedImage);
-        String etag = "status/build-test-result-flat.svg" + testPass + testTotal;
+        String etag = thisPluginCurrentVersion + "-status/build-test-result-flat.svg-" + testPass + testTotal;
 
         try {
             return new StatusImage(etag, is);
@@ -216,9 +218,10 @@ public class ImageResolver {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
         return null;
-
     }
+    
     /**
      * TO DO
      * @param image
@@ -263,10 +266,9 @@ public class ImageResolver {
 	            String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
 	            return modifiedPass.replace("{total-tests}", testTotal.toString());
 	        }
-                
         }
-
     }
+    
     /**
      * TO DO
      * @param color
@@ -290,9 +292,9 @@ public class ImageResolver {
                 return images[4];
             default:
                 return images[5];
-
         }
     }
+    
     /**
      * TO DO
      * @param image
@@ -350,7 +352,7 @@ public class ImageResolver {
 
         String replacedImage = replaceBuildDescriptionSVG(sb.toString(), buildDescription);
         InputStream is = toInputStream(replacedImage);
-        String etag = "status/build-description-flat.svg" + buildDescription;
+        String etag = thisPluginCurrentVersion + "-status/build-description-flat.svg-" + buildDescription;
 
         try {
             return new StatusImage(etag, is);
