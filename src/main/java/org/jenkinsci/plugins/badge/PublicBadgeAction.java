@@ -128,11 +128,11 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         Job<?, ?> project = getProject(job);
         Integer codeCoverage = null;
 
-        if (project.getLastCompletedBuild() != null) {
+        if (project.getLastSuccessfulBuild() != null) {
             PluginWrapper jacocoInstalled = getInstance().pluginManager.getPlugin("jacoco");
             // Checks for Jacoco
             if (jacocoInstalled != null && jacocoInstalled.isActive()) {
-                JacocoBuildAction jacocoAction = project.getLastCompletedBuild().getAction(JacocoBuildAction.class);
+                JacocoBuildAction jacocoAction = project.getLastSuccessfulBuild().getAction(JacocoBuildAction.class);
                 if (jacocoAction != null) {
                     if (jacocoAction.getInstructionCoverage() != null){
                     codeCoverage = jacocoAction.getInstructionCoverage().getPercentage();
@@ -142,27 +142,26 @@ public class PublicBadgeAction implements UnprotectedRootAction {
             PluginWrapper coberturaInstalled = getInstance().pluginManager.getPlugin("cobertura");
             // Checks for Cobertura
             if (coberturaInstalled != null && coberturaInstalled.isActive()) {
-                CoberturaBuildAction coverageAction = project.getLastCompletedBuild().getAction(CoberturaBuildAction.class);
+                CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
                 if (coverageAction != null) {
                     if (coverageAction.getBuildHealth() != null){
                         codeCoverage = coverageAction.getResults().get(CoverageMetric.LINE).getPercentage();
                     }
                 }
             }
-           PluginWrapper cloverInstalled = getInstance().pluginManager.getPlugin("clover");
+            PluginWrapper cloverInstalled = getInstance().pluginManager.getPlugin("clover");
             // Checks for Clover
-                if (cloverInstalled != null && cloverInstalled.isActive()) {
-                    CloverBuildAction cloverAction = project.getLastCompletedBuild().getAction(CloverBuildAction.class);
-                    if (cloverAction != null){
-                        if (cloverAction.getBuildHealth() != null){
-                            codeCoverage = cloverAction.getElementCoverage().getPercentage();
-                        }
+            if (cloverInstalled != null && cloverInstalled.isActive()) {
+                CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
+                if (cloverAction != null){
+                    if (cloverAction.getBuildHealth() != null){
+                        codeCoverage = cloverAction.getElementCoverage().getPercentage();
                     }
                 }
+            }
         }
 
         return iconResolver.getCoverageImage(codeCoverage);
-
     }
 
     /**
@@ -201,10 +200,9 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     public HttpResponse doBuildIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
         Job<?, ?> project = getProject(job);
         return iconResolver.getImage(project.getIconColor());
-
     }
     
-        /**
+    /**
      * Serves the Build Description badge image.
      * @param req
      * @param rsp
