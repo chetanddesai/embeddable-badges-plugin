@@ -37,6 +37,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -49,6 +50,7 @@ import org.kohsuke.stapler.StaplerResponse;
 /**
  * @author Dominik Bartholdi (imod)
  */
+@SuppressWarnings("unused")
 public class PublicBadgeActionTest {
 
     /**
@@ -175,6 +177,7 @@ public class PublicBadgeActionTest {
         j.buildAndAssertSuccess(project);
    
     }
+    
     /**
      *
      * @throws Exception
@@ -246,7 +249,7 @@ public class PublicBadgeActionTest {
      * Test of doCoverageIcon method, of class PublicBadgeAction.
      * @throws java.io.IOException
      */
-    @Test
+	@Test
     public void testDoCoverageIcon() throws IOException {
         out.println("doCoverageIcon");
         StaplerRequest req = null;

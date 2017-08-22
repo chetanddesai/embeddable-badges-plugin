@@ -39,6 +39,7 @@ import hudson.security.Permission;
 import static hudson.security.PermissionScope.ITEM;
 import hudson.tasks.test.AbstractTestResultAction;
 import java.io.IOException;
+
 import static jenkins.model.Jenkins.getInstance;
 import org.acegisecurity.context.SecurityContext;
 import static org.acegisecurity.context.SecurityContextHolder.setContext;
@@ -148,20 +149,19 @@ public class PublicBadgeAction implements UnprotectedRootAction {
                     }
                 }
             }
-           PluginWrapper cloverInstalled = getInstance().pluginManager.getPlugin("clover");
+            PluginWrapper cloverInstalled = getInstance().pluginManager.getPlugin("clover");
             // Checks for Clover
-                if (cloverInstalled != null && cloverInstalled.isActive()) {
-                    CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
-                    if (cloverAction != null){
-                        if (cloverAction.getBuildHealth() != null){
-                            codeCoverage = cloverAction.getElementCoverage().getPercentage();
-                        }
+            if (cloverInstalled != null && cloverInstalled.isActive()) {
+                CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
+                if (cloverAction != null){
+                    if (cloverAction.getBuildHealth() != null){
+                        codeCoverage = cloverAction.getElementCoverage().getPercentage();
                     }
                 }
+            }
         }
 
         return iconResolver.getCoverageImage(codeCoverage);
-
     }
 
     /**
@@ -171,13 +171,14 @@ public class PublicBadgeAction implements UnprotectedRootAction {
      * @param job
      * @return
      */
-    public HttpResponse doTestIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
+    @SuppressWarnings("rawtypes")
+	public HttpResponse doTestIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
         Job<?, ?> project = getProject(job);
         Integer testPass = null;
         Integer testTotal = null;
 
-        if (project.getLastSuccessfulBuild() != null) {
-        	AbstractTestResultAction testAction =  project.getLastSuccessfulBuild().getAction(AbstractTestResultAction.class);
+        if (project.getLastCompletedBuild() != null) {
+        	AbstractTestResultAction testAction =  project.getLastCompletedBuild().getAction(AbstractTestResultAction.class);
 			if(testAction != null){
 				int total = testAction.getTotalCount();
 				int pass = total - testAction.getFailCount() - testAction.getSkipCount();
@@ -199,10 +200,9 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     public HttpResponse doBuildIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
         Job<?, ?> project = getProject(job);
         return iconResolver.getImage(project.getIconColor());
-
     }
     
-        /**
+    /**
      * Serves the Build Description badge image.
      * @param req
      * @param rsp
@@ -212,12 +212,22 @@ public class PublicBadgeAction implements UnprotectedRootAction {
     public HttpResponse doBuildDescriptionIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
         Job<?, ?> project = getProject(job);
         String buildDescription = null;
-        if (project.getLastSuccessfulBuild() != null) {
+        
+        /*if (project.getLastSuccessfulBuild() != null) {
             buildDescription = project.getLastSuccessfulBuild().getDescription();
+        }*/
+        
+        /*if (project.getLastBuild() != null) {
+            buildDescription = project.getLastBuild().getDescription();
+        }*/
+        
+        if (project.getLastCompletedBuild() != null) {
+            buildDescription = project.getLastCompletedBuild().getDescription();
         }
+        
         return iconResolver.getBuildDescriptionImage(buildDescription);
-
     }
+    
     /** 
      * TO DO
      * @param job

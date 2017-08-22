@@ -29,9 +29,11 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+
 import static jenkins.model.Jenkins.getInstance;
 import org.apache.commons.io.IOUtils;
 import static org.apache.commons.io.IOUtils.toInputStream;
+
 /**
  * TO DO
  * @author dkersch
@@ -65,7 +67,12 @@ public class ImageResolver {
      * TO DO
      */
     public static final String BLUE = "#007ec6";
+    
+    // Include the plugin's current version number in the ETag,...
+	// ...so that cached responses from a previous version don't get served
+    private final String thisPluginCurrentVersion = getClass().getPackage().getImplementationVersion();
 
+    
     /**
      * TO DO
      * @throws IOException
@@ -92,7 +99,6 @@ public class ImageResolver {
      * @return
      */
     public StatusImage getCoverageImage(Integer codeCoverage) {
-
         // TODO don't read file everytime, store this as a static variable in
         // TODO memory with the constructor
         URL image = null;
@@ -115,7 +121,7 @@ public class ImageResolver {
 
         String replacedImage = replaceCodeCoverageSVG(sb.toString(), codeCoverage);
         InputStream is = toInputStream(replacedImage);
-        String etag = "status/build-coverage-flat.svg" + codeCoverage;
+        String etag = thisPluginCurrentVersion + "-status/build-coverage-flat.svg-" + codeCoverage;
 
         try {
             return new StatusImage(etag, is);
@@ -123,9 +129,10 @@ public class ImageResolver {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
         return null;
-
     }
+    
     /**
      * TO DO
      * @param image
@@ -133,10 +140,10 @@ public class ImageResolver {
      * @return
      */
     private String replaceCodeCoverageSVG(String image, Integer codeCoverage) {
-
         if (codeCoverage == null) {
             String modifiedColor = image.replace("{hex-color-to-change}", GREY);
-            return modifiedColor.replace("{code-coverage-to-change}", "0");
+            //return modifiedColor.replace("{code-coverage-to-change}", "0");
+            return modifiedColor.replace("{code-coverage-to-change}", "NaN");
 
         } else if (codeCoverage < 20) {
             String modifiedColor = image.replace("{hex-color-to-change}", RED);
@@ -148,34 +155,31 @@ public class ImageResolver {
             String modifiedColor = image.replace("{hex-color-to-change}", GREEN);
             return modifiedColor.replace("{code-coverage-to-change}", codeCoverage.toString());
         }
-
-    }
-    private Integer[] scaleBadge(Integer totalLength, String badgeType){
-        //52 (x6), 70 (x12) and 82 (x3), 95 (x6)
-        int defaultTextLength = 52; //default for test status
-        int defaultBadgeLength = 70; //default for test status
-        int defaultMulitplier = 6;
-        int totalTextLength;
-        Integer[] svgLengths = new Integer[2];
-        if (totalLength == null){
-            totalTextLength = 1; //"n/a"
-        } else {
-            totalTextLength = totalLength.toString().length();
-        }
-        if ("description".equals(badgeType)) {
-            defaultTextLength = 82;
-            defaultBadgeLength = 95;
-            defaultMulitplier = 3;
-    }
-        if (totalTextLength > 1) {
-            defaultTextLength = defaultTextLength + (defaultMulitplier * totalTextLength);
-            defaultBadgeLength = defaultBadgeLength + ((defaultMulitplier * 2) * totalTextLength);
-        }
-        svgLengths[0] = defaultTextLength;
-        svgLengths[1] = defaultBadgeLength;
-        return svgLengths;
     }
     
+    private Integer[] scaleBadge(Integer totalLength, String badgeType){
+        //52 (x6), 70 (x12) and 82 (x3), 95 (x6)
+        int defaultTextLength = 52; //default for test status. Old: 52
+        int defaultBadgeLength = 70; //default for test status. Old: 70
+        int defaultMultiplier = 3;	// Old: 6
+        
+        if ("description".equals(badgeType)) {
+            defaultTextLength = 82;	// Old: 82
+            defaultBadgeLength = 95;	// Old: 95
+            defaultMultiplier = 3;	// Old: 3
+        }
+        
+        if (totalLength > 3) {	// > "n/a"
+            defaultTextLength = defaultTextLength + (defaultMultiplier * totalLength);
+            defaultBadgeLength = defaultBadgeLength + ((defaultMultiplier * 2) * totalLength);
+        }
+        
+        Integer[] svgLengths = new Integer[2];
+        svgLengths[0] = defaultTextLength;
+        svgLengths[1] = defaultBadgeLength;
+        
+        return svgLengths;
+    }
     
     /**
      * TO DO
@@ -184,7 +188,6 @@ public class ImageResolver {
      * @return
      */
     public StatusImage getTestResultImage(Integer testPass, Integer testTotal) {
-
         // TODO don't read file everytime
         // TODO store this as a static variable in memory with the constructor
         URL image = null;
@@ -196,7 +199,7 @@ public class ImageResolver {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-
+        
         StringBuilder sb = null;
         try {
             sb = new StringBuilder(IOUtils.toString(image.openStream()));
@@ -207,7 +210,7 @@ public class ImageResolver {
 
         String replacedImage = replaceTestResultSVG(sb.toString(), testPass, testTotal);
         InputStream is = toInputStream(replacedImage);
-        String etag = "status/build-test-result-flat.svg" + testPass + testTotal;
+        String etag = thisPluginCurrentVersion + "-status/build-test-result-flat.svg-" + testPass + testTotal;
 
         try {
             return new StatusImage(etag, is);
@@ -215,9 +218,10 @@ public class ImageResolver {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
         return null;
-
     }
+    
     /**
      * TO DO
      * @param image
@@ -229,9 +233,15 @@ public class ImageResolver {
         int totalLength;
         String badgeType;
         badgeType = "tests";
-        totalLength = testPass.toString().length() + testTotal.toString().length() + 1; //include the "/" in the badge
-        Integer defaultTextLength = scaleBadge(totalLength, badgeType)[0];
-        Integer defaultBadgeLength = scaleBadge(totalLength, badgeType)[1];
+        try {
+        	totalLength = testPass.toString().length() + testTotal.toString().length() + 1; //include the "/" in the badge
+        } catch (Exception ex) {
+        	totalLength = 3;	// "n/a"
+        }
+        
+        Integer[] svgLengths = scaleBadge(totalLength, badgeType);
+        Integer defaultTextLength = svgLengths[0];
+        Integer defaultBadgeLength = svgLengths[1];
         String modifiedTextLength = image.replace("{change-text-length}", String.valueOf(defaultTextLength));
         String modifiedBadgeLength = modifiedTextLength.replace("{change-badge-length}", String.valueOf(defaultBadgeLength));
         
@@ -256,10 +266,9 @@ public class ImageResolver {
 	            String modifiedPass = modifiedColor.replace("{passed-tests}", testPass.toString());
 	            return modifiedPass.replace("{total-tests}", testTotal.toString());
 	        }
-                
         }
-
     }
+    
     /**
      * TO DO
      * @param color
@@ -283,9 +292,9 @@ public class ImageResolver {
                 return images[4];
             default:
                 return images[5];
-
         }
     }
+    
     /**
      * TO DO
      * @param image
@@ -297,9 +306,16 @@ public class ImageResolver {
         int totalLength;
         String badgeType;
         badgeType = "description";
-        totalLength = buildDescription.length();
-        Integer defaultTextLength = scaleBadge(totalLength, badgeType)[0];
-        Integer defaultBadgeLength = scaleBadge(totalLength, badgeType)[1];
+        try {
+        	totalLength = buildDescription.length();
+        } catch (Exception ex) {
+        	totalLength = 3;	// "n/a"
+        }
+        
+        Integer[] svgLengths = scaleBadge(totalLength, badgeType);
+        Integer defaultTextLength = svgLengths[0];
+        Integer defaultBadgeLength = svgLengths[1];
+        
         String modifiedTextLength = image.replace("{change-text-length}", String.valueOf(defaultTextLength));
         String modifiedBadgeLength = modifiedTextLength.replace("{change-badge-length}", String.valueOf(defaultBadgeLength));
         
@@ -311,15 +327,15 @@ public class ImageResolver {
             String modifiedColor = modifiedBadgeLength.replace("{hex-color-to-change}", BLUE);
             String modifiedPass = modifiedColor.replace("{description_text}", buildDescription);
             return modifiedPass;
-	        }
         }
+    }
     
     public StatusImage getBuildDescriptionImage(String buildDescription) {
          // TODO don't read file everytime
         // TODO store this as a static variable in memory with the constructor
-        URL image = null;
+        URL imageUrl = null;
         try {
-            image = new URL(
+            imageUrl = new URL(
                     getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
                     "status/build-description-flat.svg");
         } catch (MalformedURLException e1) {
@@ -328,7 +344,7 @@ public class ImageResolver {
         }
         StringBuilder sb = null;
         try {
-            sb = new StringBuilder(IOUtils.toString(image.openStream()));
+            sb = new StringBuilder(IOUtils.toString(imageUrl.openStream()));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -336,7 +352,7 @@ public class ImageResolver {
 
         String replacedImage = replaceBuildDescriptionSVG(sb.toString(), buildDescription);
         InputStream is = toInputStream(replacedImage);
-        String etag = "status/build-description-flat.svg" + buildDescription;
+        String etag = thisPluginCurrentVersion + "-status/build-description-flat.svg-" + buildDescription;
 
         try {
             return new StatusImage(etag, is);

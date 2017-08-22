@@ -12,6 +12,7 @@ import jenkins.model.TransientActionFactory;
 /**
  * @author Kohsuke Kawaguchi
  */
+@SuppressWarnings("rawtypes")
 @Extension
 public class BadgeActionFactory extends TransientActionFactory<Job> {
 

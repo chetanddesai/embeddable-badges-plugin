@@ -3,12 +3,15 @@ package org.jenkinsci.plugins.badge;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
 import javax.servlet.ServletException;
-import static javax.servlet.http.HttpServletResponse.*;
+import javax.servlet.http.HttpServletResponse;
+
 import static jenkins.model.Jenkins.RESOURCE_PATH;
 import static jenkins.model.Jenkins.getInstance;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.apache.commons.io.IOUtils.toByteArray;
+
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -54,7 +57,10 @@ class StatusImage implements HttpResponse {
      * @throws IOException
      */
     StatusImage(String fileName) throws IOException {
-        etag = '"' + RESOURCE_PATH + '/' + fileName + '"';
+    	// Include the plugin version number in the ETag,...
+    	// ...so that cached responses from a previous version don't get served
+    	String thisPluginCurrentVersion = getClass().getPackage().getImplementationVersion();
+        etag = thisPluginCurrentVersion + "-" + RESOURCE_PATH + '/' + fileName;
 
         URL image;
         image = new URL(
@@ -84,6 +90,7 @@ class StatusImage implements HttpResponse {
         }
         length = Integer.toString(payload.length);
     }
+    
     /**
      * TO DO
      * @param req
@@ -94,9 +101,10 @@ class StatusImage implements HttpResponse {
      */
     @Override
     public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
-        String v = req.getHeader("If-None-Match");
+        // Check if the latest badge is already cached
+    	String v = req.getHeader("If-None-Match");
         if (etag.equals(v)) {
-            rsp.setStatus(SC_NOT_MODIFIED);
+            rsp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
             return;
         }
 
