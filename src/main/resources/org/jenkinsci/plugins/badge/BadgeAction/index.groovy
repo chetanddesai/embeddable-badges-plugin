@@ -31,6 +31,7 @@ l.layout {
 """)
 
         def fullJobName = h.escape(my.project.fullName);
+        def jobUrlWithView =  "${app.rootUrl}${my.project.url}";
         def jobUrlWithoutView =  "${app.rootUrl}${app.getItemByFullName(fullJobName).getUrl()}";
         def buildStatus = "${app.rootUrl}buildStatus/buildIcon?job=${fullJobName}";
         def coverage = "${app.rootUrl}buildStatus/coverageIcon?job=${fullJobName}";
@@ -45,8 +46,14 @@ l.layout {
 		h3(_("Direct URL"))
 		input(type:"text",value:buildStatus,class:"select-all")
 
+        h3(_("Markdown (with view)"))
+        input(type:"text",value:"[![Build Status](${buildStatus})](${jobUrlWithView})",class:"select-all")
+
         h3(_("Markdown"))
         input(type:"text",value:"[![Build Status](${buildStatus})](${jobUrlWithoutView})",class:"select-all")
+
+        h3(_("Confluence (with view)"))
+        input(type:"text",value:"[!${buildStatus}!|${jobUrlWithView}]",class:"select-all")
 
         h3(_("Confluence"))
         input(type:"text",value:"[!${buildStatus}!|${jobUrlWithoutView}]",class:"select-all")
@@ -59,8 +66,14 @@ l.layout {
 		h3(_("Direct URL"))
 		input(type:"text",value:coverage,class:"select-all")
 
+        h3(_("Markdown (with view)"))
+        input(type:"text",value:"[![Code Coverage](${coverage})](${jobUrlWithView})",class:"select-all")
+
         h3(_("Markdown"))
         input(type:"text",value:"[![Code Coverage](${coverage})](${jobUrlWithoutView})",class:"select-all")
+
+        h3(_("Confluence (with view)"))
+        input(type:"text",value:"[!${coverage}!|${jobUrlWithView}]",class:"select-all")
 
         h3(_("Confluence"))
         input(type:"text",value:"[!${coverage}!|${jobUrlWithoutView}]",class:"select-all")
@@ -73,8 +86,14 @@ l.layout {
 		h3(_("Direct URL"))
 		input(type:"text",value:test,class:"select-all")
 
+        h3(_("Markdown (with view)"))
+        input(type:"text",value:"[![Test Status](${test})](${jobUrlWithView})",class:"select-all")
+
         h3(_("Markdown"))
         input(type:"text",value:"[![Test Status](${test})](${jobUrlWithoutView})",class:"select-all")
+
+        h3(_("Confluence (with view)"))
+        input(type:"text",value:"[!${test}!|${jobUrlWithView}]",class:"select-all")
 
         h3(_("Confluence"))
         input(type:"text",value:"[!${test}!|${jobUrlWithoutView}]",class:"select-all")
@@ -87,8 +106,14 @@ l.layout {
 		h3(_("Direct URL"))
 		input(type:"description",value:description,class:"select-all")
 
+        h3(_("Markdown (with view)"))
+        input(type:"text",value:"[![description](${description})](${jobUrlWithView})",class:"select-all")
+
         h3(_("Markdown"))
         input(type:"text",value:"[![description](${description})](${jobUrlWithoutView})",class:"select-all")
+
+        h3(_("Confluence (with view)"))
+        input(type:"text",value:"[!${description}!|${jobUrlWithView}]",class:"select-all")
 
         h3(_("Confluence"))
         input(type:"text",value:"[!${description}!|${jobUrlWithoutView}]",class:"select-all")
