@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.5.2
+[chetanddesai](https://github.com/chetanddesai)
+
+* [YogiKhan](https://github.com/YogiKhan) Add view support [#54](https://github.com/SxMShaDoW/embeddable-badges-plugin/pull/54)
+* [vijkris99](https://github.com/vijkris99) Fix badge truncation bug [#52](https://github.com/SxMShaDoW/embeddable-badges-plugin/pull/52)
+
 ## 2.5.1
 [chetanddesai](https://github.com/chetanddesai)
 
