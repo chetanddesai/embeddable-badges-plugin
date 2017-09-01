@@ -24,6 +24,8 @@
 package org.jenkinsci.plugins.badge;
 
 import hudson.model.BallColor;
+import hudson.model.HealthReport;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -331,7 +333,7 @@ public class ImageResolver {
     }
     
     public StatusImage getBuildDescriptionImage(String buildDescription) {
-         // TODO don't read file everytime
+        // TODO don't read file everytime
         // TODO store this as a static variable in memory with the constructor
         URL imageUrl = null;
         try {
@@ -361,5 +363,54 @@ public class ImageResolver {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public StatusImage getWeatherImage(HealthReport healthReport) {
+    	// TODO don't read file everytime
+        // TODO store this as a static variable in memory with the constructor
+        URL imageUrl = null;
+        String imageName;
+        
+        int score = healthReport.getScore();
+        if (score <= 20) {
+            imageName = "weather/health-00to19.svg";
+        } else if (score <= 40) {
+        	imageName = "weather/health-20to39.svg";
+        } else if (score <= 60) {
+        	imageName = "weather/health-40to59.svg";
+        } else if (score <= 80) {
+        	imageName = "weather/health-60to79.svg";
+        } else {
+        	imageName = "weather/health-80plus.svg";
+        }
+        
+        try {
+            imageUrl = new URL(
+                    getInstance().pluginManager.getPlugin("embeddable-badges").baseResourceURL,
+                    imageName);
+        } catch (MalformedURLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    	
+        StringBuilder sb = null;
+        try {
+            sb = new StringBuilder(IOUtils.toString(imageUrl.openStream()));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        InputStream is = toInputStream(sb.toString());
+        String etag = thisPluginCurrentVersion + "-" + imageName;
+
+        try {
+            return new StatusImage(etag, is);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+    	return null;
     }
 }

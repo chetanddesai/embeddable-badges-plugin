@@ -27,6 +27,8 @@ import hudson.Extension;
 import hudson.PluginWrapper;
 import static hudson.model.Item.PERMISSIONS;
 import static hudson.model.Item.READ;
+
+import hudson.model.HealthReport;
 import hudson.model.Job;
 import hudson.model.UnprotectedRootAction;
 import hudson.plugins.clover.CloverBuildAction;
@@ -226,6 +228,20 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         }
         
         return iconResolver.getBuildDescriptionImage(buildDescription);
+    }
+    
+    /**
+     * Serves the Weather badge image.
+     * @param req
+     * @param rsp
+     * @param job
+     * @return
+     */
+    public HttpResponse doWeatherIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
+        Job<?, ?> project = getProject(job);
+        HealthReport healthReport = project.getBuildHealth();
+        
+        return iconResolver.getWeatherImage(healthReport);
     }
     
     /** 
