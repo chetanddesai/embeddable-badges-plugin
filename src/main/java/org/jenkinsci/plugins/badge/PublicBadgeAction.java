@@ -146,9 +146,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
             if (coberturaInstalled != null && coberturaInstalled.isActive()) {
                 CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
                 if (coverageAction != null) {
-                    if (coverageAction.getBuildHealth() != null){
-                        codeCoverage = coverageAction.getResults().get(CoverageMetric.LINE).getPercentage();
-                    }
+                	codeCoverage = coverageAction.getResults().get(CoverageMetric.LINE).getPercentage();
                 }
             }
             PluginWrapper cloverInstalled = getInstance().pluginManager.getPlugin("clover");
