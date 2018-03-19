@@ -217,11 +217,11 @@ public class PublicBadgeAction implements UnprotectedRootAction {
             buildDescription = project.getLastSuccessfulBuild().getDescription();
         }*/
         
-        /*if (project.getLastBuild() != null) {
+        if (project.getLastBuild() != null) {
             buildDescription = project.getLastBuild().getDescription();
-        }*/
+        }
         
-        if (project.getLastCompletedBuild() != null) {
+        if (buildDescription == null && project.getLastCompletedBuild() != null) {
             buildDescription = project.getLastCompletedBuild().getDescription();
         }
         
