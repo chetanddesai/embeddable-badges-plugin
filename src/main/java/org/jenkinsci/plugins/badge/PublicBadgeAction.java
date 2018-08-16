@@ -137,16 +137,16 @@ public class PublicBadgeAction implements UnprotectedRootAction {
                 JacocoBuildAction jacocoAction = project.getLastSuccessfulBuild().getAction(JacocoBuildAction.class);
                 if (jacocoAction != null) {
                     if (jacocoAction.getInstructionCoverage() != null){
-                    codeCoverage = jacocoAction.getInstructionCoverage().getPercentage();
+						codeCoverage = jacocoAction.getInstructionCoverage().getPercentage();
                     }
                 }
             }
             PluginWrapper coberturaInstalled = getInstance().pluginManager.getPlugin("cobertura");
             // Checks for Cobertura
             if (coberturaInstalled != null && coberturaInstalled.isActive()) {
-                CoberturaBuildAction coverageAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
-                if (coverageAction != null) {
-                	codeCoverage = coverageAction.getResults().get(CoverageMetric.LINE).getPercentage();
+                CoberturaBuildAction coberturaAction = project.getLastSuccessfulBuild().getAction(CoberturaBuildAction.class);
+                if (coberturaAction != null) {
+                	codeCoverage = coberturaAction.getResults().get(CoverageMetric.LINE).getPercentage();
                 }
             }
             PluginWrapper cloverInstalled = getInstance().pluginManager.getPlugin("clover");
@@ -154,9 +154,7 @@ public class PublicBadgeAction implements UnprotectedRootAction {
             if (cloverInstalled != null && cloverInstalled.isActive()) {
                 CloverBuildAction cloverAction = project.getLastSuccessfulBuild().getAction(CloverBuildAction.class);
                 if (cloverAction != null){
-                    if (cloverAction.getBuildHealth() != null){
-                        codeCoverage = cloverAction.getElementCoverage().getPercentage();
-                    }
+                    codeCoverage = cloverAction.getElementCoverage().getPercentage();
                 }
             }
         }
