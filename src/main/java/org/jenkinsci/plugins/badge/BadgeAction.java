@@ -1,6 +1,7 @@
 package org.jenkinsci.plugins.badge;
 
 import hudson.model.Action;
+import hudson.model.BallColor;
 import hudson.model.Job;
 import static jenkins.model.Jenkins.RESOURCE_PATH;
 import static org.jenkinsci.plugins.badge.Messages.BadgeAction_DisplayName;
@@ -69,6 +70,12 @@ public class BadgeAction implements Action {
      * @return
      */
     public HttpResponse doBuildIcon() {
-        return factory.getImage(project.getIconColor());
+    	BallColor lastBuildColor;
+        if(project.getLastCompletedBuild() != null) {
+        	lastBuildColor = project.getLastCompletedBuild().getIconColor();
+        } else {
+        	lastBuildColor = BallColor.NOTBUILT;
+        }
+        return factory.getImage(project.getIconColor(), lastBuildColor);
     }
 }

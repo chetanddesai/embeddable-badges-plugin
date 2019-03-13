@@ -83,11 +83,15 @@ public class ImageResolver {
         styles = new HashMap<String, StatusImage[]>();
         // shields.io "flat" style (new default from Feb 1 2015)
         StatusImage[] flatImages;
-        flatImages = new StatusImage[]{
+        flatImages = new StatusImage[] {
             new StatusImage("build-failing-red-flat.svg"),
             new StatusImage("build-unstable-yellow-flat.svg"),
             new StatusImage("build-passing-brightgreen-flat.svg"),
-            new StatusImage("build-running-blue-flat.svg"),
+            new StatusImage("build-running-blue-red-flat.svg"),
+            new StatusImage("build-running-blue-yellow-flat.svg"),
+            new StatusImage("build-running-blue-brightgreen-flat.svg"),
+            new StatusImage("build-running-blue-lightgrey-aborted-flat.svg"),
+            new StatusImage("build-running-blue-lightgrey-unknown-flat.svg"),
             new StatusImage("build-aborted-lightgrey-flat.svg"),
             new StatusImage("build-unknown-lightgrey-flat.svg")
         };
@@ -276,11 +280,11 @@ public class ImageResolver {
      * @param color
      * @return
      */
-    public StatusImage getImage(BallColor color) {
+    public StatusImage getImage(BallColor color, BallColor lastBuildColor) {
         StatusImage[] images = styles.get("default");
 
-        if (color.isAnimated()) {
-            return images[3];
+        if (color.isAnimated()) {	// Running
+        	return getRunningBuildImage(lastBuildColor);
         }
 
         switch (color) {
@@ -291,9 +295,26 @@ public class ImageResolver {
             case BLUE:
                 return images[2];
             case ABORTED:
-                return images[4];
+                return images[8];
             default:
+                return images[9];
+        }
+    }
+    
+    private StatusImage getRunningBuildImage(BallColor lastBuildColor) {
+    	StatusImage[] images = styles.get("default");
+
+        switch (lastBuildColor) {
+            case RED:
+                return images[3];
+            case YELLOW:
+                return images[4];
+            case BLUE:
                 return images[5];
+            case ABORTED:
+                return images[6];
+            default:
+                return images[7];
         }
     }
     

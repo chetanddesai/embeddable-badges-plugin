@@ -28,6 +28,7 @@ import hudson.PluginWrapper;
 import static hudson.model.Item.PERMISSIONS;
 import static hudson.model.Item.READ;
 
+import hudson.model.BallColor;
 import hudson.model.HealthReport;
 import hudson.model.Job;
 import hudson.model.UnprotectedRootAction;
@@ -197,7 +198,13 @@ public class PublicBadgeAction implements UnprotectedRootAction {
      */
     public HttpResponse doBuildIcon(StaplerRequest req, StaplerResponse rsp, @QueryParameter String job) {
         Job<?, ?> project = getProject(job);
-        return iconResolver.getImage(project.getIconColor());
+        BallColor lastBuildColor;
+        if(project.getLastCompletedBuild() != null) {
+        	lastBuildColor = project.getLastCompletedBuild().getIconColor();
+        } else {
+        	lastBuildColor = BallColor.NOTBUILT;
+        }
+        return iconResolver.getImage(project.getIconColor(), lastBuildColor);
     }
     
     /**
