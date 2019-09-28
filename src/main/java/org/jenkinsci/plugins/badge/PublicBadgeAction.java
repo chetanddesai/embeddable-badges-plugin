@@ -29,8 +29,6 @@ import static hudson.model.Item.PERMISSIONS;
 import static hudson.model.Item.READ;
 import hudson.model.Job;
 import hudson.model.UnprotectedRootAction;
-import io.jenkins.plugins.coverage.CoverageAction;
-import io.jenkins.plugins.coverage.targets.CoverageElement;
 import hudson.plugins.clover.CloverBuildAction;
 import hudson.plugins.cobertura.CoberturaBuildAction;
 import hudson.plugins.cobertura.targets.CoverageMetric;
@@ -131,16 +129,6 @@ public class PublicBadgeAction implements UnprotectedRootAction {
         Integer codeCoverage = null;
 
         if (project.getLastSuccessfulBuild() != null) {
-            PluginWrapper codeCoverageApiInstalled = getInstance().pluginManager.getPlugin("code-coverage-api");
-            // Checks for Code Coverage API
-            if (codeCoverageApiInstalled != null && codeCoverageApiInstalled.isActive()) {
-                CoverageAction coverageAction = project.getLastSuccessfulBuild().getAction(CoverageAction.class);
-                if (coverageAction != null) {
-                    if (coverageAction.getBuildHealth() != null){
-                        codeCoverage = coverageAction.getResult().getCoverage(CoverageElement.LINE).getPercentage();
-                    }
-                }
-            }
             PluginWrapper jacocoInstalled = getInstance().pluginManager.getPlugin("jacoco");
             // Checks for Jacoco
             if (jacocoInstalled != null && jacocoInstalled.isActive()) {
