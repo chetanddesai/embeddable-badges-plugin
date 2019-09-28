@@ -1,5 +1,9 @@
 # Change Log
 
+## next
+
+* [rguenthe](https://github.com/rguenthe) Add [code coverage api](https://github.com/jenkinsci/code-coverage-api-plugin) line coverage support [#60](https://github.com/SxMShaDoW/embeddable-badges-plugin/pull/60)
+
 ## 2.5.2
 [chetanddesai](https://github.com/chetanddesai)
 
