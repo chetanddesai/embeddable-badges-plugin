@@ -30,7 +30,6 @@ Reports a coverage percentage for the following technologies:
 1. Clover: Line coverage percentage
 2. Cobertura: Element coverage percentage
 3. Jacoco: Instruction coverage percentage
-4. Code Coverage API: Line coverage percentage
 
 ### Unit Tests
 Number of JUnit or TestNG tests executed successfully.
