@@ -2,9 +2,11 @@
 language: java
 sudo: false
 
+jdk: openjdk8
+
 script:
   - mvn clean install
-  
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
